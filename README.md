@@ -101,6 +101,10 @@ case "tes" : {
    }
 break
 ```
-## 📢 Discussion 
-Jika ingin mengenal seputar Script ini lebih dalam lagi
-silahkan mampir ke komunitas kami
+## 📢 Jgn Lupa Follow Channel dan Join Group ya
+
+**Base Sc: https://whatsapp.com/channel/0029Vb0YWvYJ3jusF2nk9U1P**
+
+**Ch-1: https://whatsapp.com/channel/0029VadFS3r89inc7Jjus03W**
+
+**Ch-2: https://whatsapp.com/channel/0029VateyJuKWEKhJMRKEL20**
