@@ -35,7 +35,7 @@
     "axios-cookiejar-support": "^5.0.5",
     "baileys": "github:AxellNetwork/Baileys",
     "btch-downloader": "^2.8.4",
-    "btch-gemini": "^2.4.4",
+    "btch-gemini": "^3.0.1",
     "canvafy": "^7.2.0",
     "canvas": "^2.11.2",
     "chalk": "^4.1.2",
