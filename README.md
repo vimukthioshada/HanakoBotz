@@ -65,7 +65,7 @@ module.exports = config
 
 
 ```bash
-$ git clone https://github.com/AxellNetwork/HanakoBotz
+$ git clone https://github.com/FrankXz12/HanakoBotz
 $ cd HanakoBotz
 $ npm install
 $ npm start
