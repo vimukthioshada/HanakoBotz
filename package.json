@@ -11,7 +11,7 @@
     "start": "node index.js"
   },
   "repository": {
-    "url": "git+https://github.com/Axel/nekoBot.git"
+    "url": "git+https://github.com/LeooxzyDekuu/HanakoBotz.git"
   },
   "keywords": [
     "botwa"
@@ -19,9 +19,9 @@
   "author": "HanakoBotz",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Axel/nekoBot/issues"
+    "url": "https://github.com/LeooxzyDekuu/HanakoBotz/issues"
   },
-  "homepage": "https://github.com/Axel/nekoBot#readme",
+  "homepage": "https://github.com/LeooxzyDekuu/HanakoBotz#readme",
   "dependencies": {
     "@distube/ytdl-core": "^4.15.9",
     "@ibaraki-douji/pixivts": "^2.4.1",
