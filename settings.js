@@ -1,7 +1,7 @@
 const fs = require('node:fs');
 
 const config = {
-    owner: ["6283136099660","6282172589188"],
+    owner: ["6283136099660"],
     name: "ʜᴀɴᴀᴋᴏ-ᴋᴜɴ-ʙᴏᴛᴢ",
     ownername: 'ʟᴇᴏᴏxᴢʏ', 
     ownername2: 'ᴅᴇᴋᴜ',
