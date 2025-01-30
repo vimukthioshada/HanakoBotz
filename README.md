@@ -53,7 +53,7 @@ const config = {
       premium: "*( Denied )* Fitur ini khusus user premium",
       group: "*( Denied )* Fitur ini khusus group",
    },
-   database: "neko-db",
+   database: "hanako-db",
    tz: "Asia/Jakarta"
 }
 
