@@ -274,7 +274,7 @@ Kalau Error Bisa Hubungi Ke .owner gass`
 
         await m.reply({
             audio: {
-                url: "https://nauval.mycdn.biz.id/download/1737936795960.m4a"
+                url: "https://file.btch.rf.gd/file/qcadnyfp8dxk17z3aibo.m4a"
             },
             mimetype: 'audio/mpeg',
             ptt: true
