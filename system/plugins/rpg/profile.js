@@ -68,9 +68,12 @@ module.exports = {
 
         try {
             urlPic = await sock.profilePictureUrl(m.sender, 'image')
-       } catch {
-         urlPic = "https://nauval.mycdn.biz.id/download/1737947197756.jpeg"
-     }
+        } catch (e) {
+            urlPic = "https://file.btch.rf.gd/file/dlhruelxlqwdjeq28ilr.jpg"
+            try {
+                urlPic = "https://files.catbox.moe/px1m46.jpg"
+            } catch (e) {}
+        }
 
         await m.reply({
             image: {
