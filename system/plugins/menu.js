@@ -271,11 +271,11 @@ Kalau Error Bisa Hubungi Ke .owner gass`
         }, {
             quoted: m
         });
-       try {
-         audiovn = "https://file.btch.rf.gd/file/1zt892mfq1ardp6lm62n.m4a"
-       } catch {
-         audiovn = "https://files.catbox.moe/ujx8u9.m4a"
-       }
+        try {
+            audiovn = "https://file.btch.rf.gd/file/1zt892mfq1ardp6lm62n.m4a"
+        } catch {
+            audiovn = "https://files.catbox.moe/ujx8u9.m4a"
+        }
         await m.reply({
             audio: {
                 url: audiovn
