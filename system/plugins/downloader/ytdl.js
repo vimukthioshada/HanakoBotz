@@ -55,7 +55,7 @@ let deku = async (m, {
         oi += ` =〆 ᴀɢᴏ: ${result.ago}\n`
         oi += ` =〆 ᴜʀʟ: ${result.url}`
         try {
-            await Scraper.ytmp3cc("https://youtube.com/watch?v=jTUVQMQ48Ns", 'mp4').then(async (a) => {
+            await Scraper.ytmp3cc(text, 'mp4').then(async (a) => {
                 sock.sendMessage(m.cht, {
                     video: {
                         url: a.link
