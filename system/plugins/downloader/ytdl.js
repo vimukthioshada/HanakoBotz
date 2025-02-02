@@ -34,16 +34,17 @@ let deku = async (m, {
 
     if (m.args[1] == "--mp3") {
         try {
-            const mp3 = await sytdl.dl(text, "4", "audio")
-            await sock.sendMessage(m.cht, {
+await Scraper.ytmp3cc(text, 'mp3').then(async (a) => {
+            sock.sendMessage(m.cht, {
                 audio: {
-                    url: mp3.link
+                    url: a.link
                 },
-                mimetype: 'audio/mpeg'
+                mimetype: "audio/mpeg"
             }, {
                 quoted: m
             })
-            m.reply('Done ✅')
+        })
+            m.react('✅')
         } catch (err) {
             m.reply('error' + err)
         }
@@ -54,34 +55,20 @@ let deku = async (m, {
         oi += ` =〆 ᴀɢᴏ: ${result.ago}\n`
         oi += ` =〆 ᴜʀʟ: ${result.url}`
         try {
-            const mp4 = await sytdl.dl(text, "5", "video")
-
-            await sock.sendMessage(m.cht, {
+await Scraper.ytmp3cc("https://youtube.com/watch?v=jTUVQMQ48Ns", 'mp4').then(async (a) => {
+            sock.sendMessage(m.cht, {
                 video: {
-                    url: mp4.link
+                    url: a.link
                 },
-                caption: oi
+                caption: ""
             }, {
                 quoted: m
             })
-        } catch (err) {
-            try {
-                const mp4 = await sytdl.dl(text, "5", "video")
-
-                sock.sendMessage(m.cht, {
-                    document: {
-                        url: mp4.link
-                    },
-                    mimetype: 'video/mpeg',
-                    fileName: result.title + '.mp4'
-                }, {
-                    quoted: m
-                })
-                m.reply('Done ✅')
+        })
             } catch (err) {
                 m.reply('error' + err)
             }
-        }
+                m.react('✅')
     } else {
         let lagi = `\`[ Audio ]\` ${m.prefix + m.command} https://youtube.com/watch?v=dFi9L9C_-kw --mp3
 
