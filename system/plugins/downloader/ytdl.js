@@ -60,7 +60,7 @@ let deku = async (m, {
                     video: {
                         url: a.link
                     },
-                    caption: ""
+                    caption: oi
                 }, {
                     quoted: m
                 })
