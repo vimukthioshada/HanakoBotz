@@ -12,18 +12,14 @@ let deku = async (m, {
     config
 }) => {
 
-    if (!text.includes('youtu')) throw "Link Contoh .ytmp3 <link>";
-
+    if (!text.includes('youtu')) throw "Link Contoh ${m.prefix + m.command} <link>";
     const videoId = await ytdl.getURLVideoID(text)
+    if (videoId.length === 0) return m.reply(Func.Styles('Maaf VideoId nya ga valid'))
     let result = await yts({
         videoId: videoId,
         hl: 'id',
         gl: 'ID'
     })
-
-    if (!result.url || !result) {
-        m.reply(Func.Styles('maaf ga ketemu...'))
-    }
 
     let hah = result.url;
     let deku = Func.Styles(`⏤͟͟͞͞╳── *[ yta - download ]* ── .々─ᯤ\n`)
@@ -54,34 +50,43 @@ let deku = async (m, {
     }, {
         quoted: m
     })
-
     try {
-        const {
-            result
-        } = await Scraper.y2ts.dl(text)
-        await sock.sendMessage(m.cht, {
-            audio: {
-                url: result.mp3
-            },
-            mimetype: 'audio/mpeg'
-        }, {
-            quoted: m
-        })
-    } catch (err) {
-        try {
-            const {
-                downloadUrl
-            } = await Scraper.ddownr.download(text, 'mp3')
-            await sock.sendMessage(m.cht, {
+        await Scraper.ytmp3cc(text, 'mp3').then(async (a) => {
+            sock.sendMessage(m.cht, {
                 audio: {
-                    url: downloadUrl
+                    url: a.link
                 },
-                mimetype: 'audio/mpeg'
+                mimetype: "audio/mpeg"
             }, {
                 quoted: m
             })
+        })
+    } catch (err) {
+        try {
+            await axios.get('https://ytdl-api.caliphdev.com/download/audio?url=' + 'https://youtube.com/watch?v=' + videoId).then(async (a) => {
+                m.reply({
+                    audio: {
+                        url: a.data.downloadUrl
+                    },
+                    mimetype: 'audio/mpeg'
+                })
+            })
         } catch (err) {
-            m.reply('error' + err)
+            try {
+                const {
+                    downloadUrl
+                } = await Scraper.ddownr.download(text, 'mp3')
+                await sock.sendMessage(m.cht, {
+                    audio: {
+                        url: downloadUrl
+                    },
+                    mimetype: 'audio/mpeg'
+                }, {
+                    quoted: m
+                })
+            } catch (err) {
+                m.reply('error' + err)
+            }
         }
     }
     m.react('✅')
