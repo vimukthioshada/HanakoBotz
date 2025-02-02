@@ -24,7 +24,7 @@ let deku = async (m, {
 `
 
     if (!text.includes('youtube') || !text.includes('youtu')) return m.reply(capt)
-    
+
     const videoId = await ytdl.getURLVideoID(text)
     let result = await yts({
         videoId: videoId,
@@ -34,16 +34,16 @@ let deku = async (m, {
 
     if (m.args[1] == "--mp3") {
         try {
-await Scraper.ytmp3cc(text, 'mp3').then(async (a) => {
-            sock.sendMessage(m.cht, {
-                audio: {
-                    url: a.link
-                },
-                mimetype: "audio/mpeg"
-            }, {
-                quoted: m
+            await Scraper.ytmp3cc(text, 'mp3').then(async (a) => {
+                sock.sendMessage(m.cht, {
+                    audio: {
+                        url: a.link
+                    },
+                    mimetype: "audio/mpeg"
+                }, {
+                    quoted: m
+                })
             })
-        })
             m.react('✅')
         } catch (err) {
             m.reply('error' + err)
@@ -55,20 +55,20 @@ await Scraper.ytmp3cc(text, 'mp3').then(async (a) => {
         oi += ` =〆 ᴀɢᴏ: ${result.ago}\n`
         oi += ` =〆 ᴜʀʟ: ${result.url}`
         try {
-await Scraper.ytmp3cc("https://youtube.com/watch?v=jTUVQMQ48Ns", 'mp4').then(async (a) => {
-            sock.sendMessage(m.cht, {
-                video: {
-                    url: a.link
-                },
-                caption: ""
-            }, {
-                quoted: m
+            await Scraper.ytmp3cc("https://youtube.com/watch?v=jTUVQMQ48Ns", 'mp4').then(async (a) => {
+                sock.sendMessage(m.cht, {
+                    video: {
+                        url: a.link
+                    },
+                    caption: ""
+                }, {
+                    quoted: m
+                })
             })
-        })
-            } catch (err) {
-                m.reply('error' + err)
-            }
-                m.react('✅')
+        } catch (err) {
+            m.reply('error' + err)
+        }
+        m.react('✅')
     } else {
         let lagi = `\`[ Audio ]\` ${m.prefix + m.command} https://youtube.com/watch?v=dFi9L9C_-kw --mp3
 
