@@ -12,17 +12,14 @@ let deku = async (m, {
     config
 }) => {
 
-    if (!text.includes('youtu')) throw "Link Contoh .ytmp3 <link>";
+    if (!text.includes('youtu')) throw "Link Contoh ${m.prefix + m.command} <link>";
     const videoId = await ytdl.getURLVideoID(text)
+    if (videoId.length === 0) return m.reply(Func.Styles('Maaf VideoId nya ga valid'))
     let result = await yts({
         videoId: videoId,
         hl: 'id',
         gl: 'ID'
     })
-
-    if (!result.url || !result) {
-        m.reply(Func.Styles('maaf ga ketemu...'))
-    }
 
     let hah = result.url;
     let deku = Func.Styles(`⏤͟͟͞͞╳── *[ ytv - download ]* ── .々─ᯤ\n`)
@@ -60,64 +57,91 @@ let deku = async (m, {
     capt += ` =〆 ᴀɢᴏ: ${result.ago}\n`
     capt += ` =〆 ᴜʀʟ: ${result.url}`
     try {
-        const {
-            result
-        } = await Scraper.y2ts.dl(text)
-
-        await sock.sendMessage(m.cht, {
-            video: {
-                url: result.mp4
-            },
-            caption: capt
-        }, {
-            quoted: m
-        })
-    } catch (err) {
-        try {
-            const {
-                result
-            } = await Scraper.y2ts.dl(text)
-
+        await Scraper.ytmp3cc(text, 'mp4').then(async (a) => {
             sock.sendMessage(m.cht, {
-                document: {
-                    url: result.mp4
+                video: {
+                    url: a.link
                 },
-                mimetype: 'video/mp4',
-                fileName: result.title + '.mp4'
+                caption: capt
             }, {
                 quoted: m
             })
-        } catch (err) {
-            try {
-                const {
-                    downloadUrl
-                } = await Scraper.ddownr.download(text, '720')
+        })
+    } catch (err) {
+        try {
 
-                await sock.sendMessage(m.cht, {
-                    video: {
-                        url: downloadUrl
+            await Scraper.ytmp3cc(text, 'mp4').then(async (a) => {
+                sock.sendMessage(m.cht, {
+                    document: {
+                        url: a.link
                     },
+                    mimetype: 'video/mp4',
+                    fileName: result.title + '.mp4',
                     caption: capt
                 }, {
                     quoted: m
                 })
-            } catch (err) {
-                try {
-                    const {
-                        downloadUrl
-                    } = await Scraper.ddownr.download(text, '720')
-
+            })
+        } catch (err) {
+            try {
+                await axios.get('https://ytdl-api.caliphdev.com/download/video?url=' + 'https://youtube.com/watch?v=' + videoId).then(async (a) => {
                     sock.sendMessage(m.cht, {
-                        document: {
-                            url: downloadUrl
+                        video: {
+                            url: a.data.downloadUrl
                         },
-                        mimetype: 'video/mp4',
-                        fileName: result.title + '.mp4'
+                        caption: capt
                     }, {
                         quoted: m
                     })
+                })
+            } catch (err) {
+                try {
+
+                    await axios.get('https://ytdl-api.caliphdev.com/download/video?url=' + 'https://youtube.com/watch?v=' + videoId).then(async (a) => {
+                        sock.sendMessage(m.cht, {
+                            document: {
+                                url: a.data.downloadUrl
+                            },
+                            mimetype: 'video/mp4',
+                            fileName: result.title + '.mp4',
+                            caption: capt
+                        }, {
+                            quoted: m
+                        })
+                    })
                 } catch (err) {
-                    m.reply('error' + err)
+                    try {
+                        const {
+                            downloadUrl
+                        } = await Scraper.ddownr.download(text, '720')
+
+                        await sock.sendMessage(m.cht, {
+                            video: {
+                                url: downloadUrl
+                            },
+                            caption: capt
+                        }, {
+                            quoted: m
+                        })
+                    } catch (err) {
+                        try {
+                            const {
+                                downloadUrl
+                            } = await Scraper.ddownr.download(text, '720')
+
+                            sock.sendMessage(m.cht, {
+                                document: {
+                                    url: downloadUrl
+                                },
+                                mimetype: 'video/mp4',
+                                fileName: result.title + '.mp4'
+                            }, {
+                                quoted: m
+                            })
+                        } catch (err) {
+                            m.reply('error' + err)
+                        }
+                    }
                 }
             }
         }
