@@ -8,6 +8,7 @@ const cron = require("node-cron");
 
 module.exports = async (m, sock, store) => {
   require("../lib/logger.js")(m);
+  const client = conn = DekuGanz = sock
   if (m.key.jid === "status@broadcast") {
     await sock.readMessages([m.key]);
     await sock.sendMessage(
@@ -63,6 +64,9 @@ module.exports = async (m, sock, store) => {
       if (
         plugin.events.call(sock, m, {
           sock,
+          client,
+          conn,
+          DekuGanz,
           Func,
           config,
           Uploader,
@@ -97,6 +101,9 @@ module.exports = async (m, sock, store) => {
         }
         await plugin(m, {
             sock,
+            client,
+            conn,
+            DekuGanz,
             config,
             text,
             plugins: Object.values(pg.plugins).filter((a) => a.alias),
