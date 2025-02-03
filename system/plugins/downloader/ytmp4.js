@@ -21,6 +21,10 @@ let deku = async (m, {
         gl: 'ID'
     })
 
+    const {
+        downloadUrl
+    } = await Scraper.ddownr.download(text, '720')
+
     let hah = result.url;
     let deku = Func.Styles(`⏤͟͟͞͞╳── *[ ytv - download ]* ── .々─ᯤ\n`)
     deku += `│    =〆 ᴛɪᴛʟᴇ: ${result.title}\n`
@@ -56,27 +60,14 @@ let deku = async (m, {
     capt += ` =〆 ᴅᴜʀᴀsɪ: ${result.timestamp}\n`
     capt += ` =〆 ᴀɢᴏ: ${result.ago}\n`
     capt += ` =〆 ᴜʀʟ: ${result.url}`
-    try {
-        await Scraper.ytmp3cc(text, 'mp4').then(async (a) => {
-            sock.sendMessage(m.cht, {
-                video: {
-                    url: a.link
-                },
-                caption: capt
-            }, {
-                quoted: m
-            })
-        })
-    } catch (err) {
-        try {
 
+    if (downloadUrl) {
+        try {
             await Scraper.ytmp3cc(text, 'mp4').then(async (a) => {
                 sock.sendMessage(m.cht, {
-                    document: {
+                    video: {
                         url: a.link
                     },
-                    mimetype: 'video/mp4',
-                    fileName: result.title + '.mp4',
                     caption: capt
                 }, {
                     quoted: m
@@ -96,6 +87,49 @@ let deku = async (m, {
                 })
             } catch (err) {
                 try {
+                    await sock.sendMessage(m.cht, {
+                        video: {
+                            url: downloadUrl
+                        },
+                        caption: capt
+                    }, {
+                        quoted: m
+                    })
+                } catch (err) {
+                    m.reply('error' + err)
+                }
+            }
+        }
+
+    } else if (downloadUrl.length > 100 * 1024 * 1024) {
+        try {
+
+            await Scraper.ytmp3cc(text, 'mp4').then(async (a) => {
+                sock.sendMessage(m.cht, {
+                    document: {
+                        url: a.link
+                    },
+                    mimetype: 'video/mp4',
+                    fileName: result.title + '.mp4',
+                    caption: capt
+                }, {
+                    quoted: m
+                })
+            })
+        } catch (err) {
+            try {
+
+                sock.sendMessage(m.cht, {
+                    document: {
+                        url: downloadUrl
+                    },
+                    mimetype: 'video/mp4',
+                    fileName: result.title + '.mp4'
+                }, {
+                    quoted: m
+                })
+            } catch (err) {
+                try {
 
                     await axios.get('https://ytdl-api.caliphdev.com/download/video?url=' + 'https://youtube.com/watch?v=' + videoId).then(async (a) => {
                         sock.sendMessage(m.cht, {
@@ -110,38 +144,7 @@ let deku = async (m, {
                         })
                     })
                 } catch (err) {
-                    try {
-                        const {
-                            downloadUrl
-                        } = await Scraper.ddownr.download(text, '720')
-
-                        await sock.sendMessage(m.cht, {
-                            video: {
-                                url: downloadUrl
-                            },
-                            caption: capt
-                        }, {
-                            quoted: m
-                        })
-                    } catch (err) {
-                        try {
-                            const {
-                                downloadUrl
-                            } = await Scraper.ddownr.download(text, '720')
-
-                            sock.sendMessage(m.cht, {
-                                document: {
-                                    url: downloadUrl
-                                },
-                                mimetype: 'video/mp4',
-                                fileName: result.title + '.mp4'
-                            }, {
-                                quoted: m
-                            })
-                        } catch (err) {
-                            m.reply('error' + err)
-                        }
-                    }
+                    m.reply('error' + err)
                 }
             }
         }
@@ -159,3 +162,16 @@ deku.description = "Mendownload YouTube Video"
 deku.loading = true
 
 module.exports = deku
+
+function formatSize(size) {
+    if (size >= 1024 * 1024 * 1024) {
+        return (size / (1024 * 1024 * 1024)).toFixed(2) + ' GB';
+    }
+    if (size >= 1024 * 1024) {
+        return (size / (1024 * 1024)).toFixed(2) + ' MB';
+    }
+    if (size >= 1024) {
+        return (size / 1024).toFixed(2) + ' KB';
+    }
+    return size + ' B';
+}
