@@ -4,7 +4,6 @@
 ==================================**/
 
 const util = require("util");
-const config = require("../settings.js");
 const {
     exec
 } = require("child_process");
@@ -14,24 +13,31 @@ const Func = require("../lib/function");
 const {
     writeExif
 } = require("../lib/sticker");
-const {
-    catbox
-} = require("../lib/uploader");
-const {
-    downloadContentFromMessage
-} = require('baileys');
 const pkg = require("../lib/case");
 const Case = new pkg("./system/case.js");
 
-module.exports = async (m, sock, store) => {
-    const client = conn = DekuGanz = sock
-    const isCommand = m.prefix && m.body.startsWith(m.prefix);
+module.exports = async (m,
+    sock,
+    client,
+    conn,
+    DekuGanz,
+    config,
+    text,
+    Func,
+    Scraper,
+    Uploader,
+    store,
+    isAdmin,
+    botAdmin,
+    isPrems,
+    isBanned,
+) => {
     const quoted = m.isQuoted ? m.quoted : m;
-    const Scraper = await scraper.list();
-    await db.main(m);
+    const args = quoted.args
+    const isCommand = m.prefix && m.body.startsWith(m.prefix);
+    
     if (m.isBot) return;
     if (db.list().settings.self && !m.isOwner) return;
-
 
     if (m.isGroup && db.list().group[m.cht].mute) {
         if (!m.isAdmin && !m.isOwner) return
@@ -187,9 +193,6 @@ module.exports = async (m, sock, store) => {
         }
     }
 
-
-    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
     switch (isCommand ? m.command.toLowerCase() : false) {
         case "wm":
         case "swm": {
@@ -238,6 +241,138 @@ module.exports = async (m, sock, store) => {
                 }
             } catch (error) {
                 m.reply(`Terjadi kesalahan: ${error.message}`);
+            }
+        }
+        break;
+        case "antilink": {
+            if (!text) return m.reply({
+                poll: {
+                    name: `*– 乂 Cara Penggunaan*
+> *\`0\`* Untuk mematikan fitur ${m.prefix}antilink off
+> *\`1\`* Untuk menghidupkan fitur ${m.prefix}antilink on`,
+                    values: [`${m.prefix}antilink on`, `${m.prefix}antilink off`],
+                    selectableCount: 1,
+                },
+            });
+            const args = m.args
+            if (!m.isGroup) return m.reply('maaf khusus group')
+            if (!m.isOwner && !m.isAdmin) return m.reply('maaf command ini bisa nya ke admin and owner')
+
+            if (args[0] === 'off') {
+                db.list().group[m.cht].antilink = false
+                m.reply('Oke Fitur Antilink Udah Nonaktifkan')
+            } else if (args[0] === 'on') {
+                db.list().group[m.cht].antilink = true
+                m.reply('Oke Fitur Antilink Udah Aktif')
+            } else {
+                m.reply({
+                    poll: {
+                        name: `*– 乂 Cara Penggunaan*
+> *\`0\`* Untuk mematikan fitur ${m.prefix}antilink off
+> *\`1\`* Untuk menghidupkan fitur ${m.prefix}antilink on`,
+                        values: [`${m.prefix}antilink on`, `${m.prefix}antilink off`],
+                        selectableCount: 1,
+                    },
+                });
+            }
+        }
+        break;
+        case "antilinkgc": {
+            if (!text) return m.reply({
+                poll: {
+                    name: `*– 乂 Cara Penggunaan*
+> *\`0\`* Untuk mematikan fitur ${m.prefix}antilinkgc off
+> *\`1\`* Untuk menghidupkan fitur ${m.prefix}antilinkgc on`,
+                    values: [`${m.prefix}antilinkgc on`, `${m.prefix}antilinkgc off`],
+                    selectableCount: 1,
+                },
+            });
+            const args = m.args
+            if (!m.isGroup) return m.reply('maaf khusus group')
+            if (!m.isOwner && !m.isAdmin) return m.reply('maaf command ini bisa nya ke admin and owner')
+
+            if (args[0] === 'off') {
+                db.list().group[m.cht].antilink = false
+                m.reply('Oke Fitur Antilinkgc Udah Nonaktifkan')
+            } else if (args[0] === 'on') {
+                db.list().group[m.cht].antilink = true
+                m.reply('Oke Fitur Antilinkgc Udah Aktif')
+            } else {
+                m.reply({
+                    poll: {
+                        name: `*– 乂 Cara Penggunaan*
+> *\`0\`* Untuk mematikan fitur ${m.prefix}antilinkgc off
+> *\`1\`* Untuk menghidupkan fitur ${m.prefix}antilinkgc on`,
+                        values: [`${m.prefix}antilinkgc on`, `${m.prefix}antilinkgc off`],
+                        selectableCount: 1,
+                    },
+                });
+            }
+        }
+        break;
+        case "antilinkch": {
+            if (!text) return m.reply({
+                poll: {
+                    name: `*– 乂 Cara Penggunaan*
+> *\`0\`* Untuk mematikan fitur ${m.prefix}antilinkch off
+> *\`1\`* Untuk menghidupkan fitur ${m.prefix}antilinkch on`,
+                    values: [`${m.prefix}antilinkch on`, `${m.prefix}antilinkch off`],
+                    selectableCount: 1,
+                },
+            });
+            const args = m.args
+            if (!m.isGroup) return m.reply('maaf khusus group')
+            if (!m.isOwner && !m.isAdmin) return m.reply('maaf command ini bisa nya ke admin and owner')
+
+            if (args[0] === 'off') {
+                db.list().group[m.cht].antilinkch = false
+                m.reply('Oke Fitur Antilinkch Udah Nonaktifkan')
+            } else if (args[0] === 'on') {
+                db.list().group[m.cht].antilinkch = true
+                m.reply('Oke Fitur Antilinkch Udah Aktif')
+            } else {
+                m.reply({
+                    poll: {
+                        name: `*– 乂 Cara Penggunaan*
+> *\`0\`* Untuk mematikan fitur ${m.prefix}antilinkch off
+> *\`1\`* Untuk menghidupkan fitur ${m.prefix}antilinkch on`,
+                        values: [`${m.prefix}antilinkch on`, `${m.prefix}antilinkch off`],
+                        selectableCount: 1,
+                    },
+                });
+            }
+        }
+        break;
+        case "antitoxic": {
+            if (!text) return m.reply({
+                poll: {
+                    name: `*– 乂 Cara Penggunaan*
+> *\`0\`* Untuk mematikan fitur ${m.prefix}antitoxic off
+> *\`1\`* Untuk menghidupkan fitur ${m.prefix}antitoxic on`,
+                    values: [`${m.prefix}antitoxic on`, `${m.prefix}antitoxic off`],
+                    selectableCount: 1,
+                },
+            });
+            const args = m.args
+            if (!m.isGroup) return m.reply('maaf khusus group')
+            if (!m.isOwner && !m.isAdmin) return m.reply('maaf command ini bisa nya ke admin and owner')
+
+            if (args[0] === 'off') {
+                db.list().group[m.cht].antitoxic = false
+                m.reply('Oke Fitur Antitoxic Udah Nonaktifkan')
+            } else if (args[0] === 'on') {
+                db.list().group[m.cht].antitoxic = true
+                m.reply('Oke Fitur Antitoxic Udah Aktif')
+            } else {
+                m.reply({
+                    poll: {
+                        name: `*– 乂 Cara Penggunaan*
+> *\`0\`* Untuk mematikan fitur ${m.prefix}antitoxic off
+> *\`1\`* Untuk menghidupkan fitur ${m.prefix}antitoxic on`,
+                        values: [`${m.prefix}antitoxic on`, `${m.prefix}antitoxic off`],
+                        selectableCount: 1,
+                    },
+                });
             }
         }
         break;
@@ -323,17 +458,125 @@ module.exports = async (m, sock, store) => {
             } catch (error) {
                 m.reply(`Terjadi kesalahan: ${error.message}`);
             }
-            break;
         }
+        break;
+        case "jadwalsholat": {
+            const axios = require('axios');
+            const cheerio = require('cheerio');
+            if (!text) return m.reply("> 📍 Masukkan nama kota yang kamu tuju!");
+            const kota = text?.toLowerCase() || 'jakarta';
+
+            try {
+                const {
+                    data
+                } = await axios.get(`https://jadwal-sholat.tirto.id/kota-${kota}`);
+                const $ = cheerio.load(data);
+
+                const jadwal = $('tr.currDate td').map((i, el) => $(el).text()).get();
+
+                if (jadwal.length === 7) {
+                    const [tanggal, subuh, duha, dzuhur, ashar, maghrib, isya] = jadwal;
+
+                    const zan = `
+╭──[ *📅 Jadwal Sholat* ]──✧
+᎒⊸ *🌆 Kota*: ${kota.charAt(0).toUpperCase() + kota.slice(1)}
+᎒⊸ *📅 Tanggal*: ${tanggal}
+
+╭──[ *🕰️ Waktu Sholat* ]──✧
+᎒⊸ *Subuh:* ${subuh}
+᎒⊸ *Duha:* ${duha}
+᎒⊸ *Dzuhur:* ${dzuhur}
+᎒⊸ *Ashar:* ${ashar}
+᎒⊸ *Maghrib:* ${maghrib}
+᎒⊸ *Isya:* ${isya}
+╰────────────•`;
+
+                    await m.reply(zan);
+                } else {
+                    await m.reply('❌ Jadwal sholat tidak ditemukan. Pastikan nama kota sesuai.');
+                }
+            } catch (error) {
+                await m.reply('❌ Terjadi kesalahan saat mengambil data!');
+            }
+        }
+        break;
+
+        case "cases": {
+            if (!m.isOwner) return m.reply(config.messages.owner);
+
+            let cap = "*– 乂 *Fitur Case* –*\n";
+            cap += "> 📝 *`--add`* : Menambahkan fitur case baru\n";
+            cap += "> 🔄 *`--get`* : Mengambil fitur case\n";
+            cap += "> ❌ *`--delete`* : Menghapus fitur case\n";
+            cap += "\n*– 乂 *List Case yang Tersedia* –*\n";
+            cap += Case.list().map((a, i) => `> ${i + 1}. *${a}*`).join("\n");
+
+            if (!text) return m.reply(cap);
+
+            if (text.includes("--add")) {
+                if (!m.quoted) return m.reply("> ⚠️ Reply fitur case yang ingin disimpan!");
+                let status = Case.add(m.quoted.body);
+                m.reply(status ? "> ✅ Berhasil menambahkan case baru!" : "> ❌ Gagal menambahkan case baru.");
+            } else if (text.includes("--delete")) {
+                let input = text.replace("--delete", "").trim();
+                if (!input) return m.reply("> ⚠️ Masukkan nama case yang ingin dihapus!");
+                let status = Case.delete(input);
+                m.reply(status ? `> ✅ Berhasil menghapus case *${input}*!` : `> ❌ Case *${input}* tidak ditemukan!`);
+            } else if (text.includes("--get")) {
+                let input = text.replace("--get", "").trim();
+                if (!input) return m.reply("> ⚠️ Masukkan nama case yang ingin diambil!");
+                if (!Case.list().includes(input)) return m.reply("> ❌ Case tidak ditemukan!");
+                let status = Case.get(input);
+                m.reply(status ? status : `> ❌ Case *${input}* tidak ditemukan!`);
+            }
+        }
+        break;
+        case "zzz": {
+            let list = await Scraper.zzz.list();
+            if (!text) return m.reply("> *🔍 Masukkan nama karakter dari game ZZZ*");
+
+            let chara = list.find((a) => a.name.toLowerCase() === text.toLowerCase());
+            if (!chara) return m.reply(`> *😞 Karakter tidak ditemukan!*
+
+*– 乂 Berikut ${list.length} karakter dari game ZZZ:*
+
+${list.map((a) => Object.entries(a).map(([a, b]) => `> *🔸 ${a.capitalize()}* : ${b}`).join('\n')).join("\n\n")}`);
+
+            let data = await Scraper.zzz.chara(text);
+            let cap = "*– 乂 **Zenless Zone Zero - Detail Karakter***\n"
+            cap += Object.entries(data.info).map(([a, b]) => `> *🔹 ${a.capitalize()}* : ${b}`).join("\n");
+            cap += "\n\n*– **Statistik Karakter** :*\n"
+            cap += data.stats.map((a) => `> *🔸 ${a.name.capitalize()}* : ${a.value}`).join("\n");
+            cap += "\n\n*– **Info Tim Karakter** :*\n"
+            cap += data.team.map((a) => `> *🔹 Nama*: ${a.name}\n> *🔸 Peran*: ${a.role}`).join("\n\n");
+
+            cap += "\n\n*– **Kemampuan Karakter** :*\n"
+            cap += data.skills.map((a) => `> *🔸 Nama Kemampuan*: ${a.name}\n> ${a.description}`).join("\n\n");
+
+            m.reply({
+                text: cap,
+                contextInfo: {
+                    externalAdReply: {
+                        title: `– **Zenless Zone Zero Wiki**: ${data.info.name}`,
+                        body: `- **Elemen**: ${data.info.element}`,
+                        mediaType: 1,
+                        thumbnailUrl: data.info.image
+                    }
+                }
+            });
+        }
+        break;
+
         case "sticker":
         case "s": {
             if (/image|video|webp/.test(quoted.msg.mimetype)) {
                 let media = await quoted.download();
                 if (quoted.msg?.seconds > 10)
-                    throw "> Video diatas durasi 10 detik gabisa";
+                    throw "> *⚠️ Video lebih dari 10 detik tidak dapat dijadikan sticker*.";
+
                 let exif;
-                if (m.text) {
-                    let [packname, author] = m.text.split(/[,|\-+&]/);
+                if (text) {
+                    let [packname, author] = text.split(/[,|\-+&]/);
                     exif = {
                         packName: packname ? packname : "",
                         packPublish: author ? author : "",
@@ -344,12 +587,12 @@ module.exports = async (m, sock, store) => {
                         packPublish: config.sticker.author,
                     };
                 }
+
                 let sticker = await writeExif({
-                        mimetype: quoted.msg.mimetype,
-                        data: media
-                    },
-                    exif,
-                );
+                    mimetype: quoted.msg.mimetype,
+                    data: media
+                }, exif);
+
                 await m.reply({
                     sticker
                 });
@@ -359,7 +602,7 @@ module.exports = async (m, sock, store) => {
                     let url = await sock.profilePictureUrl(id, "image");
                     let media = await axios
                         .get(url, {
-                            responsType: "arraybuffer",
+                            responseType: "arraybuffer",
                         })
                         .then((a) => a.data);
                     let sticker = await writeExif(media, {
@@ -372,245 +615,18 @@ module.exports = async (m, sock, store) => {
                 }
             } else if (
                 /(https?:\/\/.*\.(?:png|jpg|jpeg|webp|mov|mp4|webm|gif))/i.test(
-                    m.text,
+                    text,
                 )
             ) {
-                for (let url of Func.isUrl(m.text)) {
+                for (let url of Func.isUrl(text)) {
                     await delay(1500);
                 }
-            } else
-                m.reply("> Reply photo atau video yang ingin di jadikan sticker");
+            } else {
+                m.reply("> *📸 Balas dengan foto atau video untuk dijadikan sticker*.");
+            }
         }
         break;
-        case "download_sticker":
-        case "ds": {
-            const axios = require("axios");
-            const cheerio = require("cheerio");
 
-            class Sticker {
-                constructor(stickerPackName, url = null) {
-                    this.sticker = stickerPackName;
-                    this.BASE_URL = "https://getstickerpack.com/stickers?query=" + this.sticker;
-                    this.url = url;
-                }
-
-                async search() {
-                    try {
-                        const {
-                            data: html
-                        } = await axios.get(this.BASE_URL);
-                        const $ = cheerio.load(html);
-                        const stickerPacks = [];
-
-                        $(".sticker-pack-cols").each((i, el) => {
-                            const packUrl = $(el).find("a").attr("href");
-                            const trayImage = $(el).find("img").attr("src");
-                            const username = $(el).find(".username").text();
-                            const title = $(el).find(".title").text();
-
-                            stickerPacks.push({
-                                packUrl,
-                                trayImage,
-                                username,
-                                title
-                            });
-                        });
-
-                        return stickerPacks;
-                    } catch (error) {
-                        console.error("Error fetching stickers:", error);
-                        return [];
-                    }
-                }
-
-                async download() {
-                    const {
-                        data: html
-                    } = await axios.get(this.url);
-                    const $ = cheerio.load(html);
-                    const imageUrls = [];
-
-                    $(".sticker-image").each((i, el) => {
-                        const imageUrl = $(el).attr("data-src-large");
-                        imageUrls.push(imageUrl);
-                    });
-
-                    return imageUrls;
-                }
-            }
-            m.react("🕖")
-            try {
-                if (m.text) {
-                    const stickerUrl = m.text.trim();
-                    const data = new Sticker("", stickerUrl);
-                    const imageUrls = await data.download();
-                    await m.reply("*Semua Sticker Di Kirim Lewat Private Untuk Mengindari Spam.*")
-
-                    if (imageUrls && imageUrls.length > 0) {
-                        for (const imageUrl of imageUrls) {
-                            const media = await axios.get(imageUrl, {
-                                responseType: 'arraybuffer'
-                            });
-                            const buffer = Buffer.from(media.data, 'binary');
-                            let exif = {
-                                packName: "Devolution",
-                                packPublish: m.pushName
-                            };
-
-                            let sticker = await writeExif({
-                                mimetype: 'image/png',
-                                data: buffer
-                            }, exif);
-                            await sock.sendMessage(m.sender, {
-                                sticker
-                            }, {
-                                quoted: m
-                            });
-                        }
-                        m.reply("Semua stiker berhasil diunduh dan dikirim.");
-                    } else {
-                        m.reply("Tidak ada gambar ditemukan untuk stiker.");
-                    }
-                } else {
-                    m.reply("Masukkan URL untuk mengunduh stiker.");
-                }
-            } catch (error) {
-                m.reply(`Terjadi kesalahan: ${error.message}`);
-            }
-            break;
-        }
-        case "antilink": {
-            if (!text) return m.reply({
-                poll: {
-                    name: `*– 乂 Cara Penggunaan*
-> *\`0\`* Untuk mematikan fitur ${m.prefix}antilink off
-> *\`1\`* Untuk menghidupkan fitur ${m.prefix}antilink on`,
-                    values: [`${m.prefix}antilink on`, `${m.prefix}antilink off`],
-                    selectableCount: 1,
-                },
-            });
-            const args = m.args
-            if (!m.isGroup) return m.reply('maaf khusus group')
-            if (!m.isOwner && !m.isAdmin) return m.reply('maaf command ini bisa nya ke admin and owner')
-
-            if (args[0] === 'off') {
-                db.list().group[m.cht].antilink = false
-                m.reply('Oke Fitur Mute Udah Nonaktifkan')
-            } else if (args[0] === 'on') {
-                db.list().group[m.cht].antilink = true
-                m.reply('Oke Fitur Mute Udah Aktif')
-            } else {
-                m.reply({
-                    poll: {
-                        name: `*– 乂 Cara Penggunaan*
-> *\`0\`* Untuk mematikan fitur ${m.prefix}antilink off
-> *\`1\`* Untuk menghidupkan fitur ${m.prefix}antilink on`,
-                        values: [`${m.prefix}antilink on`, `${m.prefix}antilink off`],
-                        selectableCount: 1,
-                    },
-                });
-            }
-            break
-        }
-        case "antilinkgc": {
-            if (!text) return m.reply({
-                poll: {
-                    name: `*– 乂 Cara Penggunaan*
-> *\`0\`* Untuk mematikan fitur ${m.prefix}antilinkgc off
-> *\`1\`* Untuk menghidupkan fitur ${m.prefix}antilinkgc on`,
-                    values: [`${m.prefix}antilinkgc on`, `${m.prefix}antilinkgc off`],
-                    selectableCount: 1,
-                },
-            });
-            const args = m.args
-            if (!m.isGroup) return m.reply('maaf khusus group')
-            if (!m.isOwner && !m.isAdmin) return m.reply('maaf command ini bisa nya ke admin and owner')
-
-            if (args[0] === 'off') {
-                db.list().group[m.cht].antilinkgc = false
-                m.reply('Oke Fitur Antilinkgc Udah Nonaktifkan')
-            } else if (args[0] === 'on') {
-                db.list().group[m.cht].antilinkgc = true
-                m.reply('Oke Fitur Antilinkgc Udah Aktif')
-            } else {
-                m.reply({
-                    poll: {
-                        name: `*– 乂 Cara Penggunaan*
-> *\`0\`* Untuk mematikan fitur ${m.prefix}antilinkgc off
-> *\`1\`* Untuk menghidupkan fitur ${m.prefix}antilinkgc on`,
-                        values: [`${m.prefix}antilinkgc on`, `${m.prefix}antilinkgc off`],
-                        selectableCount: 1,
-                    },
-                });
-            }
-            break;
-        }
-        case "antilinkch": {
-            if (!text) return m.reply({
-                poll: {
-                    name: `*– 乂 Cara Penggunaan*
-> *\`0\`* Untuk mematikan fitur ${m.prefix}antilinkch off
-> *\`1\`* Untuk menghidupkan fitur ${m.prefix}antilinkch on`,
-                    values: [`${m.prefix}antilinkch on`, `${m.prefix}antilinkch off`],
-                    selectableCount: 1,
-                },
-            });
-            const args = m.args
-            if (!m.isGroup) return m.reply('maaf khusus group')
-            if (!m.isOwner && !m.isAdmin) return m.reply('maaf command ini bisa nya ke admin and owner')
-
-            if (args[0] === 'off') {
-                db.list().group[m.cht].antilinkch = false
-                m.reply('Oke Fitur Antilinkch Udah Nonaktifkan')
-            } else if (args[0] === 'on') {
-                db.list().group[m.cht].antilinkch = true
-                m.reply('Oke Fitur Antilinkch Udah Aktif')
-            } else {
-                m.reply({
-                    poll: {
-                        name: `*– 乂 Cara Penggunaan*
-> *\`0\`* Untuk mematikan fitur ${m.prefix}antilinkch off
-> *\`1\`* Untuk menghidupkan fitur ${m.prefix}antilinkch on`,
-                        values: [`${m.prefix}antilinkch on`, `${m.prefix}antilinkch off`],
-                        selectableCount: 1,
-                    },
-                });
-            }
-            break;
-        }
-        case "antitoxic": {
-            if (!text) return m.reply({
-                poll: {
-                    name: `*– 乂 Cara Penggunaan*
-> *\`0\`* Untuk mematikan fitur ${m.prefix}antitoxic off
-> *\`1\`* Untuk menghidupkan fitur ${m.prefix}antitoxic on`,
-                    values: [`${m.prefix}antitoxic on`, `${m.prefix}antitoxic off`],
-                    selectableCount: 1,
-                },
-            });
-            const args = m.args
-            if (!m.isGroup) return m.reply('maaf khusus group')
-            if (!m.isOwner && !m.isAdmin) return m.reply('maaf command ini bisa nya ke admin and owner')
-
-            if (args[0] === 'off') {
-                db.list().group[m.cht].antitoxic = false
-                m.reply('Oke Fitur Antitoxic Udah Nonaktifkan')
-            } else if (args[0] === 'on') {
-                db.list().group[m.cht].antitoxic = true
-                m.reply('Oke Fitur Antitoxic Udah Aktif')
-            } else {
-                m.reply({
-                    poll: {
-                        name: `*– 乂 Cara Penggunaan*
-> *\`0\`* Untuk mematikan fitur ${m.prefix}antitoxic off
-> *\`1\`* Untuk menghidupkan fitur ${m.prefix}antitoxic on`,
-                        values: [`${m.prefix}antitoxic on`, `${m.prefix}antitoxic off`],
-                        selectableCount: 1,
-                    },
-                });
-            }
-            break;
-         }
         case "cases": {
             if (!m.isOwner) return m.reply(config.messages.owner);
 
@@ -641,15 +657,12 @@ module.exports = async (m, sock, store) => {
             }
         }
         break;
-
-        default:
     }
 };
 
-// Auto reload file
 let file = require.resolve(__filename);
 fs.watchFile(file, () => {
     fs.unwatchFile(file);
+    console.log("- Terjadi perubahan pada files case.js");
     delete require.cache[file];
-    console.log(`File ${file} telah diperbarui`);
 });
