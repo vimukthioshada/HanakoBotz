@@ -74,8 +74,8 @@ let totalreg = Object.keys(db.list().user).length
 │    =〆 ᴅᴀᴛᴇ: ${date}
 ⏤͟͟͞͞╳────────── .✦
 │
-⏤͟͟͞͞╳── *[ Menu Tambahan ]* ── .々─ᯤ
-${matches.map((a, i) => ` ${i + 1}. *${m.prefix + a}*`).join("\n")}`);
+⏤͟͟͞͞╳── *[ Menu Case ]* ── .々─ᯤ
+${matches.map((a, i) => `│    =〆 ${m.prefix + a}`).join("\n")}`);
 
         Object.entries(menu).forEach(([tag, commands]) => {
             caption += `\n\n${Func.Styles(`⏤͟͟͞͞╳── *[ Menu - ${tag.toUpperCase()} ]* ── .々─ᯤ`)}`;
