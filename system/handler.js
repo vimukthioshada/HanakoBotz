@@ -7,7 +7,6 @@ const moment = require("moment-timezone");
 const cron = require("node-cron");
 
 module.exports = async (m, sock, store) => {
-  require("../lib/logger.js")(m);
   const client = conn = DekuGanz = sock
   if (m.key.jid === "status@broadcast") {
     await sock.readMessages([m.key]);

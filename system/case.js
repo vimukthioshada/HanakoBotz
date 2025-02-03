@@ -34,21 +34,6 @@ module.exports = async (m,
 ) => {
     const quoted = m.isQuoted ? m.quoted : m;
     const args = quoted.args
-    const isCommand = m.prefix && m.body.startsWith(m.prefix);
-    
-    if (m.isBot) return;
-    if (db.list().settings.self && !m.isOwner) return;
-
-    if (m.isGroup && db.list().group[m.cht].mute) {
-        if (!m.isAdmin && !m.isOwner) return
-    }
-
-    if (m.isGroup) {
-        // Mute
-        if (db.list().group[m.cht].mute && !m.isOwner && !m.isAdmin) {
-            return
-        }
-    }
 
     let group = db.list().group[m.cht]
     if (typeof group !== 'object') db.list().group[m.cht] = {}
@@ -193,7 +178,7 @@ module.exports = async (m,
         }
     }
 
-    switch (isCommand ? m.command.toLowerCase() : false) {
+    switch (m.command) {
         case "wm":
         case "swm": {
             try {
