@@ -22,20 +22,6 @@ let deku = async (m, {
         gl: 'ID'
     })
 
-    const {
-        downloadUrl
-    } = await Scraper.ddownr.download(text, '720')
-    const filename = `./tmp/${Date.now()}.mp4`
-    fs.writeFileSync(filename, downloadUrl)
-    const fileSize = calculateFileSize(filename);
-    if (fileSize > 5 * 1024 * 1024 * 1024) { // 5 GB
-        return m.reply('File terlalu besar untuk dikirim. Maksimum ukuran file adalah 5 GB.');
-    }
-
-    if (fileSize > 1.5 * 1024 * 1024 * 1024) { // 1.5 GB
-        return m.reply('File melebihi batas 1.5 GB.');
-    }
-
     let hah = result.url;
     let deku = Func.Styles(`⏤͟͟͞͞╳── *[ ytv - download ]* ── .々─ᯤ\n`)
     deku += `│    =〆 ᴛɪᴛʟᴇ: ${result.title}\n`
@@ -65,6 +51,21 @@ let deku = async (m, {
     }, {
         quoted: m
     });
+
+    const {
+        downloadUrl
+    } = await Scraper.ddownr.download(text, '720')
+    const filename = `./tmp/${Date.now()}.mp4`
+    fs.writeFileSync(filename, downloadUrl)
+    const fileSize = calculateFileSize(filename);
+    if (fileSize > 5 * 1024 * 1024 * 1024) { // 5 GB
+        return m.reply('File terlalu besar untuk dikirim. Maksimum ukuran file adalah 5 GB.');
+    }
+
+    if (fileSize > 1.5 * 1024 * 1024 * 1024) { // 1.5 GB
+        return m.reply('File melebihi batas 1.5 GB.');
+    }
+
 
     let capt = ` =〆 ᴛɪᴛʟᴇ: ${result.title}\n`
     capt += ` =〆 ɪᴅ: ${result.videoId}\n`
