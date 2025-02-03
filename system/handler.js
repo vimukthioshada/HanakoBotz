@@ -153,7 +153,7 @@ module.exports = async (m, sock, store) => {
             }
           });
       }
-
+           
     } catch (error) {
       if (error.name) {
         for (let owner of config.owner) {
@@ -168,7 +168,7 @@ module.exports = async (m, sock, store) => {
             text: caption
           })
         }
-        m.reply(Func.jsonFormat(error));
+        m.reply("*– 乂 *Error Terdeteksi* 📉*\n !*\n> Command gagal dijalankan karena terjadi error\n> Laporan telah terkirim kepada owner kami dan akan segera di perbaiki !");
       } else {
         m.reply(Func.jsonFormat(error));
       }

@@ -177,8 +177,27 @@ module.exports = async (m,
             })
         }
     }
-
+    try {
     switch (m.command) {
+    case "rvo": case "readviewonce": {
+    const baileys = require('baileys')
+    if (!m.quoted) return m.reply('Reply Pesan Kalau Mau Rvo')
+    let msg = m.quoted.message
+    let type = Object.keys(msg)[0]
+      let media = await baileys.downloadContentFromMessage(msg[type], type == 'imageMessage' ? 'image' : 'video')
+        let buffer = Buffer.from([])
+            for await (const chunk of media) {
+               buffer = Buffer.concat([buffer, chunk])
+            }
+            if (/video/.test(type)) {
+              return sock.sendFile(m.cht, buffer, 'media.mp4', msg[type].caption || '', m)
+            } else if (/image/.test(type)) {
+              return sock.sendFile(m.cht, buffer, 'media.jpg', msg[type].caption || '', m)
+            } else {
+              m.reply('Maaf Ft Nya Gagal Di Rvo😂')
+            }
+        }
+        break;
         case "wm":
         case "swm": {
             try {
@@ -230,18 +249,29 @@ module.exports = async (m,
         }
         break;
         case "antilink": {
-            if (!text) return m.reply({
-                poll: {
-                    name: `*– 乂 Cara Penggunaan*
+        if (!m.isGroup) return m.reply('maaf khusus group')
+           if (!m.isOwner && !m.isAdmin) return m.reply('maaf command ini bisa nya ke admin and owner')
+         const send = {
+            text: `*– 乂 Cara Penggunaan*
 > *\`0\`* Untuk mematikan fitur ${m.prefix}antilink off
 > *\`1\`* Untuk menghidupkan fitur ${m.prefix}antilink on`,
-                    values: [`${m.prefix}antilink on`, `${m.prefix}antilink off`],
-                    selectableCount: 1,
-                },
-            });
+            footer: config.name,
+            buttons: [{
+                buttonId: `.${m.prefix + m.command} on`,
+                buttonText: {
+                    displayText: 'Nonaktifkan'
+                }
+            }, {
+                buttonId: `.${m.prefix + m.command} on`,
+                buttonText: {
+                    displayText: 'Aktifkan'
+                }
+            }],
+              viewOnce: true,
+              headerType: 6,
+           }
+            if (!text) return m.reply(send)
             const args = m.args
-            if (!m.isGroup) return m.reply('maaf khusus group')
-            if (!m.isOwner && !m.isAdmin) return m.reply('maaf command ini bisa nya ke admin and owner')
 
             if (args[0] === 'off') {
                 db.list().group[m.cht].antilink = false
@@ -250,64 +280,70 @@ module.exports = async (m,
                 db.list().group[m.cht].antilink = true
                 m.reply('Oke Fitur Antilink Udah Aktif')
             } else {
-                m.reply({
-                    poll: {
-                        name: `*– 乂 Cara Penggunaan*
-> *\`0\`* Untuk mematikan fitur ${m.prefix}antilink off
-> *\`1\`* Untuk menghidupkan fitur ${m.prefix}antilink on`,
-                        values: [`${m.prefix}antilink on`, `${m.prefix}antilink off`],
-                        selectableCount: 1,
-                    },
-                });
+              m.reply(send)
             }
         }
         break;
         case "antilinkgc": {
-            if (!text) return m.reply({
-                poll: {
-                    name: `*– 乂 Cara Penggunaan*
-> *\`0\`* Untuk mematikan fitur ${m.prefix}antilinkgc off
-> *\`1\`* Untuk menghidupkan fitur ${m.prefix}antilinkgc on`,
-                    values: [`${m.prefix}antilinkgc on`, `${m.prefix}antilinkgc off`],
-                    selectableCount: 1,
-                },
-            });
+        if (!m.isGroup) return m.reply('maaf khusus group')
+           if (!m.isOwner && !m.isAdmin) return m.reply('maaf command ini bisa nya ke admin and owner')
+         const send = {
+            text: `*– 乂 Cara Penggunaan*
+> *\`0\`* Untuk mematikan fitur ${m.prefix}antilink off
+> *\`1\`* Untuk menghidupkan fitur ${m.prefix}antilink on`,
+            footer: config.name,
+            buttons: [{
+                buttonId: `.${m.prefix + m.command} on`,
+                buttonText: {
+                    displayText: 'Nonaktifkan'
+                }
+            }, {
+                buttonId: `.${m.prefix + m.command} on`,
+                buttonText: {
+                    displayText: 'Aktifkan'
+                }
+            }],
+              viewOnce: true,
+              headerType: 6,
+           }
+            if (!text) return m.reply(send)
             const args = m.args
-            if (!m.isGroup) return m.reply('maaf khusus group')
-            if (!m.isOwner && !m.isAdmin) return m.reply('maaf command ini bisa nya ke admin and owner')
 
-            if (args[0] === 'off') {
-                db.list().group[m.cht].antilink = false
-                m.reply('Oke Fitur Antilinkgc Udah Nonaktifkan')
-            } else if (args[0] === 'on') {
-                db.list().group[m.cht].antilink = true
-                m.reply('Oke Fitur Antilinkgc Udah Aktif')
-            } else {
-                m.reply({
-                    poll: {
-                        name: `*– 乂 Cara Penggunaan*
-> *\`0\`* Untuk mematikan fitur ${m.prefix}antilinkgc off
-> *\`1\`* Untuk menghidupkan fitur ${m.prefix}antilinkgc on`,
-                        values: [`${m.prefix}antilinkgc on`, `${m.prefix}antilinkgc off`],
-                        selectableCount: 1,
-                    },
-                });
-            }
+      if (args[0] === 'off') {
+        db.list().group[m.cht].antilinkgc = false
+        m.reply('Oke Fitur Antilink Udah Nonaktifkan')
+          } else if (args[0] === 'on') {
+           db.list().group[m.cht].antilinkgc = true
+           m.reply('Oke Fitur Antilink Udah Aktif')
+          } else {
+              m.reply(send)
+          }
         }
         break;
         case "antilinkch": {
-            if (!text) return m.reply({
-                poll: {
-                    name: `*– 乂 Cara Penggunaan*
-> *\`0\`* Untuk mematikan fitur ${m.prefix}antilinkch off
-> *\`1\`* Untuk menghidupkan fitur ${m.prefix}antilinkch on`,
-                    values: [`${m.prefix}antilinkch on`, `${m.prefix}antilinkch off`],
-                    selectableCount: 1,
-                },
-            });
+        if (!m.isGroup) return m.reply('maaf khusus group')
+           if (!m.isOwner && !m.isAdmin) return m.reply('maaf command ini bisa nya ke admin and owner')
+         const send = {
+            text: `*– 乂 Cara Penggunaan*
+> *\`0\`* Untuk mematikan fitur ${m.prefix}antilink off
+> *\`1\`* Untuk menghidupkan fitur ${m.prefix}antilink on`,
+            footer: config.name,
+            buttons: [{
+                buttonId: `.${m.prefix + m.command} on`,
+                buttonText: {
+                    displayText: 'Nonaktifkan'
+                }
+            }, {
+                buttonId: `.${m.prefix + m.command} on`,
+                buttonText: {
+                    displayText: 'Aktifkan'
+                }
+            }],
+              viewOnce: true,
+              headerType: 6,
+           }
+            if (!text) return m.reply(send)
             const args = m.args
-            if (!m.isGroup) return m.reply('maaf khusus group')
-            if (!m.isOwner && !m.isAdmin) return m.reply('maaf command ini bisa nya ke admin and owner')
 
             if (args[0] === 'off') {
                 db.list().group[m.cht].antilinkch = false
@@ -316,31 +352,34 @@ module.exports = async (m,
                 db.list().group[m.cht].antilinkch = true
                 m.reply('Oke Fitur Antilinkch Udah Aktif')
             } else {
-                m.reply({
-                    poll: {
-                        name: `*– 乂 Cara Penggunaan*
-> *\`0\`* Untuk mematikan fitur ${m.prefix}antilinkch off
-> *\`1\`* Untuk menghidupkan fitur ${m.prefix}antilinkch on`,
-                        values: [`${m.prefix}antilinkch on`, `${m.prefix}antilinkch off`],
-                        selectableCount: 1,
-                    },
-                });
+              m.reply(send)
             }
         }
         break;
         case "antitoxic": {
-            if (!text) return m.reply({
-                poll: {
-                    name: `*– 乂 Cara Penggunaan*
-> *\`0\`* Untuk mematikan fitur ${m.prefix}antitoxic off
-> *\`1\`* Untuk menghidupkan fitur ${m.prefix}antitoxic on`,
-                    values: [`${m.prefix}antitoxic on`, `${m.prefix}antitoxic off`],
-                    selectableCount: 1,
-                },
-            });
+        if (!m.isGroup) return m.reply('maaf khusus group')
+           if (!m.isOwner && !m.isAdmin) return m.reply('maaf command ini bisa nya ke admin and owner')
+         const send = {
+            text: `*– 乂 Cara Penggunaan*
+> *\`0\`* Untuk mematikan fitur ${m.prefix}antilink off
+> *\`1\`* Untuk menghidupkan fitur ${m.prefix}antilink on`,
+            footer: config.name,
+            buttons: [{
+                buttonId: `.${m.prefix + m.command} on`,
+                buttonText: {
+                    displayText: 'Nonaktifkan'
+                }
+            }, {
+                buttonId: `.${m.prefix + m.command} on`,
+                buttonText: {
+                    displayText: 'Aktifkan'
+                }
+            }],
+              viewOnce: true,
+              headerType: 6,
+           }
+            if (!text) return m.reply(send)
             const args = m.args
-            if (!m.isGroup) return m.reply('maaf khusus group')
-            if (!m.isOwner && !m.isAdmin) return m.reply('maaf command ini bisa nya ke admin and owner')
 
             if (args[0] === 'off') {
                 db.list().group[m.cht].antitoxic = false
@@ -349,15 +388,7 @@ module.exports = async (m,
                 db.list().group[m.cht].antitoxic = true
                 m.reply('Oke Fitur Antitoxic Udah Aktif')
             } else {
-                m.reply({
-                    poll: {
-                        name: `*– 乂 Cara Penggunaan*
-> *\`0\`* Untuk mematikan fitur ${m.prefix}antitoxic off
-> *\`1\`* Untuk menghidupkan fitur ${m.prefix}antitoxic on`,
-                        values: [`${m.prefix}antitoxic on`, `${m.prefix}antitoxic off`],
-                        selectableCount: 1,
-                    },
-                });
+              m.reply(send)
             }
         }
         break;
@@ -643,6 +674,29 @@ ${list.map((a) => Object.entries(a).map(([a, b]) => `> *🔸 ${a.capitalize()}* 
         }
         break;
     }
+   } catch (error) {
+    if (error.name) {
+     for (let owner of config.owner) {
+       let jid = await sock.onWhatsApp(owner + "@s.whatsapp.net");
+        if (!jid[0].exists) continue;
+         let caption = "*– 乂 *Error Terdeteksi* 📉*\n"
+          caption += `> *-* Nama command : ${m.command}\n`
+          caption += `> *-* Lokasi File : ${name}`
+          caption += `\n\n${Func.jsonFormat(error)}`
+   
+          sock.sendMessage(owner + "@s.whatsapp.net", {
+          text: caption
+        })
+      }
+     m.reply("*– 乂 *Error Terdeteksi* 📉*\n !*\n> Command gagal dijalankan karena terjadi error\n> Laporan telah terkirim kepada owner kami dan akan segera di perbaiki !");
+    } else {
+      m.reply(Func.jsonFormat(error));
+    }
+  } finally {
+    if (db.list().settings.online) {
+      await sock.readMessages([m.key]);
+    }
+  }
 };
 
 let file = require.resolve(__filename);
