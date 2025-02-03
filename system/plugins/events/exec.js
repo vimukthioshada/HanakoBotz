@@ -9,10 +9,13 @@ const Func = require(process.cwd() + "/lib/function");
 
 async function events(m, {
     sock,
+    client,
+    conn,
+    DekuGanz,
     config,
     store
 }) {
-    const quoted = m.isQuoted ? m.quoted : m;
+    const quoted = q = m.isQuoted ? m.quoted : m;
     const Scraper = await scraper.list();
     await db.main(m);
     // Eval command untuk owner
