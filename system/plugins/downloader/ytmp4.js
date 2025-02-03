@@ -1,6 +1,7 @@
 const axios = require("axios");
 const yts = require('yt-search')
 const ytdl = require('ytdl-core')
+const fs = require('fs')
 
 let deku = async (m, {
     sock,
@@ -24,6 +25,16 @@ let deku = async (m, {
     const {
         downloadUrl
     } = await Scraper.ddownr.download(text, '720')
+    const filename = `./tmp/${Date.now()}.mp4`
+    fs.writeFileSync(filename, downloadUrl)
+    const fileSize = calculateFileSize(filename);
+    if (fileSize > 5 * 1024 * 1024 * 1024) { // 5 GB
+        return m.reply('File terlalu besar untuk dikirim. Maksimum ukuran file adalah 5 GB.');
+    }
+
+    if (fileSize > 1.5 * 1024 * 1024 * 1024) { // 1.5 GB
+        return m.reply('File melebihi batas 1.5 GB.');
+    }
 
     let hah = result.url;
     let deku = Func.Styles(`⏤͟͟͞͞╳── *[ ytv - download ]* ── .々─ᯤ\n`)
@@ -61,7 +72,7 @@ let deku = async (m, {
     capt += ` =〆 ᴀɢᴏ: ${result.ago}\n`
     capt += ` =〆 ᴜʀʟ: ${result.url}`
 
-    if (downloadUrl) {
+    if (fileSize <= 100 * 1024 * 1024) { // 100 MB
         try {
             await Scraper.ytmp3cc(text, 'mp4').then(async (a) => {
                 sock.sendMessage(m.cht, {
@@ -101,7 +112,7 @@ let deku = async (m, {
             }
         }
 
-    } else if (downloadUrl.length > 100 * 1024 * 1024) {
+    } else {
         try {
 
             await Scraper.ytmp3cc(text, 'mp4').then(async (a) => {
@@ -163,15 +174,7 @@ deku.loading = true
 
 module.exports = deku
 
-function formatSize(size) {
-    if (size >= 1024 * 1024 * 1024) {
-        return (size / (1024 * 1024 * 1024)).toFixed(2) + ' GB';
-    }
-    if (size >= 1024 * 1024) {
-        return (size / (1024 * 1024)).toFixed(2) + ' MB';
-    }
-    if (size >= 1024) {
-        return (size / 1024).toFixed(2) + ' KB';
-    }
-    return size + ' B';
+function calculateFileSize(filePath) {
+    const stats = fs.statSync(filePath);
+    return stats.size;
 }
