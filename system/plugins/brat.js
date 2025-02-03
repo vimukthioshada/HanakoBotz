@@ -18,7 +18,6 @@ let deku = async (m, {
     config
 }) => {
     if (!text) return m.reply("> Reply/Masukan pessn");
-    m.reply(config.messages.wait);
     let media = await axios.get(`https://brat.caliphdev.com/api/brat?text=${text}`, {
         responseType: 'arraybuffer'
     }).then(a => a.data);
