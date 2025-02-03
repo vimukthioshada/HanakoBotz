@@ -21,8 +21,10 @@ const {
     downloadContentFromMessage
 } = require('baileys');
 const pkg = require("../lib/case");
+const Case = new pkg("./system/case.js");
 
 module.exports = async (m, sock, store) => {
+    const client = conn = DekuGanz = sock
     const isCommand = m.prefix && m.body.startsWith(m.prefix);
     const quoted = m.isQuoted ? m.quoted : m;
     const Scraper = await scraper.list();
@@ -608,7 +610,37 @@ module.exports = async (m, sock, store) => {
                 });
             }
             break;
+         }
+        case "cases": {
+            if (!m.isOwner) return m.reply(config.messages.owner);
+
+            let cap = "*– 乂 **Cara Penggunaan Fitur Case***\n";
+            cap += "> *➕ `--add`* untuk menambah fitur case baru\n";
+            cap += "> *🔄 `--get`* untuk mengambil fitur case yang ada\n";
+            cap += "> *❌ `--delete`* untuk menghapus fitur case\n";
+            cap += "\n*– 乂 **Daftar Case yang Tersedia** :*\n";
+            cap += Case.list().map((a, i) => `> *${i + 1}.* ${a}`).join("\n");
+
+            if (!text) return m.reply(cap);
+
+            if (text.includes("--add")) {
+                if (!m.quoted) return m.reply("> *⚠️ Balas dengan fitur case yang ingin disimpan*.");
+                let status = Case.add(m.quoted.body);
+                m.reply(status ? "> *✅ Berhasil menambahkan case baru!*" : "> *❌ Gagal menambahkan case baru*.");
+            } else if (text.includes("--delete")) {
+                let input = text.replace("--delete", "").trim();
+                if (!input) return m.reply("> *⚠️ Masukkan nama case yang ingin dihapus*!");
+                let status = Case.delete(input);
+                m.reply(status ? `> *✅ Berhasil menghapus case: ${input}!*` : `> *❌ Case ${input} tidak ditemukan. Periksa daftar case yang tersedia*.`);
+            } else if (text.includes("--get")) {
+                let input = text.replace("--get", "").trim();
+                if (!input) return m.reply("> *⚠️ Masukkan nama case yang ingin diambil*!");
+                if (!Case.list().includes(input)) return m.reply("> *❌ Case tidak ditemukan!*");
+                let status = Case.get(input);
+                m.reply(status ? status : `> *❌ Case ${input} tidak ditemukan. Periksa daftar case yang tersedia*.`);
+            }
         }
+        break;
 
         default:
     }
