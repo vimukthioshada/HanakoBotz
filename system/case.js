@@ -179,23 +179,23 @@ module.exports = async (m,
     }
     try {
     switch (m.command) {
-    case "rvo": case "readviewonce": {
+   case "rvo":
+   case "readviewonce": {
     const baileys = require('baileys')
-    if (!m.quoted) return m.reply('Reply Pesan Kalau Mau Rvo')
-    let msg = m.quoted.message
+    if (!m.quoted) throw 'Reply Pesan Kalau Mau Rvo'
     let type = Object.keys(msg)[0]
-      let media = await baileys.downloadContentFromMessage(msg[type], type == 'imageMessage' ? 'image' : 'video')
-        let buffer = Buffer.from([])
-            for await (const chunk of media) {
-               buffer = Buffer.concat([buffer, chunk])
-            }
-            if (/video/.test(type)) {
-              return sock.sendFile(m.cht, buffer, 'media.mp4', msg[type].caption || '', m)
-            } else if (/image/.test(type)) {
-              return sock.sendFile(m.cht, buffer, 'media.jpg', msg[type].caption || '', m)
-            } else {
-              m.reply('Maaf Ft Nya Gagal Di Rvo😂')
-            }
+    let media = await baileys.downloadContentFromMessage(msg[type], type == 'imageMessage' ? 'image' : 'video')
+    let buffer = Buffer.from([])
+    for await (const chunk of media) {
+        buffer = Buffer.concat([buffer, chunk])
+    }
+    if (/video/.test(type)) {
+      return sock.sendFile(m.cht, buffer, 'media.mp4', msg[type].caption || '', m)
+       } else if (/image/.test(type)) {
+          return sock.sendFile(m.cht, buffer, 'media.jpg', msg[type].caption || '', m)
+          } else {
+            m.reply('Maaf Ft Nya Gagal Di Rvo😂')
+          }
         }
         break;
         case "wm":
@@ -253,16 +253,16 @@ module.exports = async (m,
            if (!m.isOwner && !m.isAdmin) return m.reply('maaf command ini bisa nya ke admin and owner')
          const send = {
             text: `*– 乂 Cara Penggunaan*
-> *\`0\`* Untuk mematikan fitur ${m.prefix}antilink off
-> *\`1\`* Untuk menghidupkan fitur ${m.prefix}antilink on`,
+> *\`0\`* Untuk mematikan fitur ${m.prefix + m.command} off
+> *\`1\`* Untuk menghidupkan fitur ${m.prefix + m.command} on`,
             footer: config.name,
             buttons: [{
-                buttonId: `.${m.prefix + m.command} on`,
+                buttonId: `${m.prefix + m.command} on`,
                 buttonText: {
                     displayText: 'Nonaktifkan'
                 }
             }, {
-                buttonId: `.${m.prefix + m.command} on`,
+                buttonId: `${m.prefix + m.command} on`,
                 buttonText: {
                     displayText: 'Aktifkan'
                 }
@@ -289,16 +289,16 @@ module.exports = async (m,
            if (!m.isOwner && !m.isAdmin) return m.reply('maaf command ini bisa nya ke admin and owner')
          const send = {
             text: `*– 乂 Cara Penggunaan*
-> *\`0\`* Untuk mematikan fitur ${m.prefix}antilink off
-> *\`1\`* Untuk menghidupkan fitur ${m.prefix}antilink on`,
+> *\`0\`* Untuk mematikan fitur ${m.prefix + m.command} off
+> *\`1\`* Untuk menghidupkan fitur ${m.prefix + m.command} on`,
             footer: config.name,
             buttons: [{
-                buttonId: `.${m.prefix + m.command} on`,
+                buttonId: `${m.prefix + m.command} on`,
                 buttonText: {
                     displayText: 'Nonaktifkan'
                 }
             }, {
-                buttonId: `.${m.prefix + m.command} on`,
+                buttonId: `${m.prefix + m.command} on`,
                 buttonText: {
                     displayText: 'Aktifkan'
                 }
@@ -325,16 +325,16 @@ module.exports = async (m,
            if (!m.isOwner && !m.isAdmin) return m.reply('maaf command ini bisa nya ke admin and owner')
          const send = {
             text: `*– 乂 Cara Penggunaan*
-> *\`0\`* Untuk mematikan fitur ${m.prefix}antilink off
-> *\`1\`* Untuk menghidupkan fitur ${m.prefix}antilink on`,
+> *\`0\`* Untuk mematikan fitur ${m.prefix + m.command} off
+> *\`1\`* Untuk menghidupkan fitur ${m.prefix + m.command} on`,
             footer: config.name,
             buttons: [{
-                buttonId: `.${m.prefix + m.command} on`,
+                buttonId: `${m.prefix + m.command} on`,
                 buttonText: {
                     displayText: 'Nonaktifkan'
                 }
             }, {
-                buttonId: `.${m.prefix + m.command} on`,
+                buttonId: `${m.prefix + m.command} on`,
                 buttonText: {
                     displayText: 'Aktifkan'
                 }
@@ -361,16 +361,16 @@ module.exports = async (m,
            if (!m.isOwner && !m.isAdmin) return m.reply('maaf command ini bisa nya ke admin and owner')
          const send = {
             text: `*– 乂 Cara Penggunaan*
-> *\`0\`* Untuk mematikan fitur ${m.prefix}antilink off
-> *\`1\`* Untuk menghidupkan fitur ${m.prefix}antilink on`,
+> *\`0\`* Untuk mematikan fitur ${m.prefix + m.command} off
+> *\`1\`* Untuk menghidupkan fitur ${m.prefix + m.command} on`,
             footer: config.name,
             buttons: [{
-                buttonId: `.${m.prefix + m.command} on`,
+                buttonId: `${m.prefix + m.command} on`,
                 buttonText: {
                     displayText: 'Nonaktifkan'
                 }
             }, {
-                buttonId: `.${m.prefix + m.command} on`,
+                buttonId: `${m.prefix + m.command} on`,
                 buttonText: {
                     displayText: 'Aktifkan'
                 }
