@@ -28,7 +28,7 @@ let deku = async (m, {
     if (!/video/.test(mime)) throw `Send/Reply videos with the caption *${m.prefix + m.command}* 60`;
     if ((quoted ? quoted.seconds : m.msg.seconds) > 30) throw `Maksimal video 30 detik!`
     if (!fps) throw `Masukkan fps, contoh: *${m.prefix + m.command}* 60`
-    if (fps > 30) throw `Maksimal fps adalah 30 fps!`
+    if (fps > 100) throw `Maksimal fps adalah 100 fps!`
     await sock.sendMessage(m.cht, {
         text: 'Wait... Executing the [ffmpeg] and [remini] libraries, This process may take 5-15 minutes'
     }, {
