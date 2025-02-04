@@ -12,9 +12,9 @@ let deku = async (m, {
     config
 }) => {
 
-    if (!text.includes('youtu')) throw "Link Contoh ${m.prefix + m.command} <link>";
+    if (!text.includes('youtu')) throw `Link Contoh ${m.prefix + m.command} <link>`;
     const videoId = await ytdl.getURLVideoID(text)
-    if (videoId.length === 0) return m.reply(Func.Styles('Maaf VideoId nya ga valid'))
+    if (!videoId) return m.reply(Func.Styles('Maaf VideoId nya ga valid'))
     let result = await yts({
         videoId: videoId,
         hl: 'id',
