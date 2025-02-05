@@ -3,8 +3,7 @@
  - Base: Axel
  - Remake: Dekuganz
 **/
-
-
+  
 (async () => {
   const {
     default: makeWASocket,
@@ -27,6 +26,7 @@
   const simple = require("./lib/simple.js");
   const fs = require("node:fs");
   const pkg = require("./package.json");
+  const Func = require("./lib/function.js");
   const moment = require("moment-timezone");
   const Queque = require("./lib/queque.js");
   const messageQueue = new Queque();
@@ -36,6 +36,7 @@
   const config = require("./settings.js");
 
   const appenTextMessage = async (m, sock, text, chatUpdate) => {
+    const client = conn = DekuGanz = sock
     let messages = await generateWAMessage(
       m.key.remoteJid,
       {
@@ -92,7 +93,7 @@
     }),
   });
   
-    console.log(chalk.blue.bold(`
+  console.log(chalk.blue.bold(`
   %%%%%%%%%%%%%%%%%%%%S%%%%%%%%%%%%%%%%%%%%%%SSSSSSSSSSSSSS%%SSSS%%%%%?%SSSSSSSSSSSSSSSSSS%%
 %SSSS%%%%%%%%%%%SS%%SS%%%%%%%%%%%%%%%%%%%%%SSSSSSSSSSSSSSSSSSSSS%%%%%%SSSSSSSSSSSSSSSSSSSS
 SSSSSSSSSS%%%%SSSSSSSS%SS%%S%S%%%%%%%%**%%%SSSSSSSSSSSSSSSSSSS%??%%SS%%SSSSSSSSSSSSSSSSSSS
@@ -167,6 +168,7 @@ SSSSSSS##@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#@@@@@@@@@@@@@@@@@@@@@@
       },
       store,    
     );
+    const client = conn = DekuGanz = sock
     store.bind(sock.ev);
     if (!sock.authState.creds.registered) {
       console.log(
@@ -175,7 +177,7 @@ SSSSSSS##@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#@@@@@@@@@@@@@@@@@@@@@@
         ),
       );
       const phoneNumber = await question(chalk.green.bold(`– Nomor Anda: `));
-      const code = await sock.requestPairingCode(phoneNumber);
+      const code = await sock.requestPairingCode(phoneNumber, "LEOODEKU")
       setTimeout(() => {
         console.log(chalk.white.bold("- Kode Pairing Anda: " + code));
       }, 3000);
@@ -187,23 +189,24 @@ SSSSSSS##@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#@@@@@@@@@@@@@@@@@@@@@@
       if (connection === "close") {
         const reason = new Boom(lastDisconnect?.error)?.output.statusCode;
         if (lastDisconnect.error == "Error: Stream Errored (unknown)") {
-          
+          process.exit(0)
         } else if (reason === DisconnectReason.badSession) {
           console.log(
             chalk.red.bold("File sesi buruk, Harap hapus sesi dan scan ulang"),
           );
-          
+          process.exit(0)
         } else if (reason === DisconnectReason.connectionClosed) {
           console.log(
             chalk.yellow.bold("Koneksi ditutup, sedang mencoba untuk terhubung kembali..."),
           );
-
+           process.exit(0)
         } else if (reason === DisconnectReason.connectionLost) {
           console.log(
             chalk.yellow.bold("Koneksi hilang, mencoba untuk terhubung kembali..."),
           );
-          
+          process.exit(0)
         } else if (reason === DisconnectReason.connectionReplaced) {
+        
           console.log(
             chalk.green.bold("Koneksi diganti, sesi lain telah dibuka. Harap tutup sesi yang sedang berjalan."),
           );
@@ -220,7 +223,7 @@ SSSSSSS##@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#@@@@@@@@@@@@@@@@@@@@@@
           console.log(
             chalk.green.bold("Koneksi waktu habis, sedang mencoba untuk terhubung kembali..."),
           );
-          system();
+          process.exit(0)
         }
       } else if (connection === "connecting") {
         console.log(chalk.blue.bold("Menghubungkan ke WhatsApp..."));
@@ -263,8 +266,8 @@ SSSSSSS##@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#@@@@@@@@@@@@@@@@@@@@@@
       }
     });
 
-    sock.ev.on("group-participants.update", ({ id, participants, action }) => {
-      const metadata = store.groupMetadata[id];
+    client.ev.on("group-participants.update", ({ id, participants, action }) => {
+    const metadata = store.groupMetadata[id];
       if (metadata) {
         switch (action) {
           case "add":
@@ -293,7 +296,7 @@ SSSSSSS##@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#@@@@@@@@@@@@@@@@@@@@@@
         }
       }
     });
-    
+
     async function getMessage(key) {
       if (store) {
         const msg = await store.loadMessage(key.remoteJid, key.id);
