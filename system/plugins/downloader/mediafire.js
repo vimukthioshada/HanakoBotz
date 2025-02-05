@@ -1,5 +1,7 @@
+const fetch = require('node-fetch')
+
 let deku = async (m, {
-    sock,
+    client,
     Func,
     Scraper,
     Uploader,
@@ -8,26 +10,38 @@ let deku = async (m, {
     config
 }) => {
 
-    if (!text.includes('mediafire')) throw 'masukan link mf nya'
+    if (!text.includes('www.mediafire.com')) throw 'Link Mf Nya?'
 
-    const hasil = await Scraper.mediafire(text)
+    const ya = await fetch(`https://api.ryzendesu.vip/api/downloader/mediafire?url=${text}`)
 
-    let capt = ` - 々 \`[ Downloader - Mediafire ]\` 々 -\n\n`
-    capt += Object.entries(hasil).map(([a, b]) => `> ${a.capitalize()} : ${b}`).join("\n");
-    capt += `\n> Otw Di Kirim File nya`
+    const mf = await ya.json()
 
-    m.reply(Func.Styles(capt))
+    if (!mf) return m.reply('maaf link Mf failed')
 
-    sock.sendMessage(m.cht, {
+    let caption = ` - 々 \`[ Downloader - Mediafire ]\` 々 -\n\n`
+    caption += `> FileName: ${mf.filename}
+> Ready: ${mf.ready}
+> Created: ${mf.created}
+> Desc: ${mf.description}
+> Size: ${mf.size}
+> Mimetype: ${mf.mimetype}
+> Owner: ${mf.owner}
+
+> Otw Di Kirim File nya
+`
+
+    m.reply(Func.Styles(caption))
+
+    await client.sendMessage(m.cht, {
         document: {
-            url: hasil.download
+            url: mf.download
         },
-        mimetype: hasil.mimetype,
-        fileName: hasil.filename,
-        caption: Func.Styles(capt)
+        mimetype: mf.mimetype,
+        fileName: mf.filename
     }, {
-        quoted: m
+        quoted: m.fkontak
     })
+
 }
 
 deku.command = "mediafire"
