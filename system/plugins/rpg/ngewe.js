@@ -20,7 +20,6 @@ module.exports = {
          let timeLeft = Math.ceil((cooldown - (now - lastTaxy)) / 1000);
          return m.reply(`Tunggu ${timeLeft} detik sebelum kamu dapat menggunakan ${m.command} lagi.`);
       }
-      let kelamin = ["cowok", "cewek"]
       let prosesTaksi = [
          "Mencari pelanggan🔍",
          `Anda Menemukan Pelanggan`,
