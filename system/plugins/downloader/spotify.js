@@ -20,7 +20,7 @@ module.exports = {
     }) {
         if (!text)
             throw `> *乂 Cara Penggunaan :*
-> *-* Masukan Query untuk mencari music
+> *-* Masukan Query untuk mencari musik
 > *-* Masukan Url untuk mendownload musik
 
 > *乂 Contoh Penggunaan :*
