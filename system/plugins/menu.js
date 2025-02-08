@@ -126,7 +126,8 @@ ${list.command
                     title: `々 ${config.ownername2} | ${config.name}`,
                     body: `${config.ownername2} | ` + date,
                     mediaType: 1,
-                    thumbnail: fs.readFileSync('./image/ftdoc.jpg'),
+                    thumbnail: fs.readFileSync('./image/DekuThumb.jpg'),
+                    renderLargerThumbnail: true,
                     sourceUrl: "https://www.tiktok.com/@leooxzy_ganz/",
                 }
             }
