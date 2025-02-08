@@ -25,13 +25,20 @@ let deku = async (m, {
         cap += Object.entries(pickget)
             .map(([a, b]) => `> 々- ${a.capitalize()} : ${b}`)
             .join("\n")
+        cap += `\n\n> Kalau Kamu Salah Dan Ga Suka\n> Ketik \`[ Next / Lanjut ]\``
 
-        m.reply({
+        await sock.sendAliasMessage(m.cht, {
             image: {
                 url: pickget.image
             },
             caption: cap
-        })
+        }, [{
+            alias: `next`,
+            response: `${m.prefix + m.command} ${text}`
+        }, {
+            alias: `lanjut`,
+            response: `${m.prefix + m.command} ${text}`
+        }], m);
     }
 }
 
