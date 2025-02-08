@@ -23,7 +23,7 @@ module.exports = {
       let kelamin = ["cowok", "cewek"]
       let prosesTaksi = [
          "Mencari pelanggan🔍",
-         `Anda Menemukan Pelanggan ${kelamin}`,
+         `Anda Menemukan Pelanggan`,
          `🥵 Ah~`,
          `Ah ah~`,
          `Uhmmm yamete~ ~ Crot Keluar Cairan putih putih`,
