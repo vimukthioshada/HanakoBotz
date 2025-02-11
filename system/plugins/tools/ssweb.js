@@ -1,6 +1,7 @@
 module.exports = {
     command: "ssweb",
     alias: ["screenshotweb"],
+    category: ["tools"],
     settings: {
         limit: true
     },
