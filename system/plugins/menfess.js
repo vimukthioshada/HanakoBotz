@@ -1,6 +1,7 @@
 module.exports = {
     command: "menfess",
     alias: ["confes", "menfes", "confess"],
+    category: ["main"],
     settings: {},
     description: "Mengirimkan Pesan Menfess",
     async run(m, {
