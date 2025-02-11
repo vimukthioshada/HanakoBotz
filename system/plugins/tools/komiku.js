@@ -1,75 +1,77 @@
-/*
-> *[ Plugin Komiku ]*
-> Source Scrape: https://whatsapp.com/channel/0029Vb2mOzL1Hsq0lIEHoR0N/120
-> Cjs
-> *[ Script ]*
-> https://github.com/AxellNetwork/NekoBot
-> https://devuploads.com/bqr62zcbq2oc
-> Source
-> Ch1
-> https://whatsapp.com/channel/0029VadFS3r89inc7Jjus03W
-> Ch2
-> https://whatsapp.com/channel/0029VateyJuKWEKhJMRKEL20
-*/
-
-const axios = require('axios');
-const cheerio = require('cheerio');
-
-class Command {
-       constructor() {
-       this.command = "komiku"
-       this.alias = ["kmi", "manga"] 
-       this.category = ["tools"]
-       this.settings = {
-           limit: true
-       }
-       this.description = "Mendownload Lagu Spotify"
-       this.loading = true
-   }
-   run = async(m, {
-           sock,
-           Func,
-           Scraper,
-           text,
-           config,
-           store
-        }) => {
-
-if(!text) throw ' - *[ Contoh ]*\n\n> Search\n.komiku <query>\n\nDetail\n.komiku <link>'
-
-if (/komiku.id/.test(text)) {
-const komide = await Scraper.komiku.detail(text)
-
-  let ya = ` ⏤͟͟͞͞╳─ *[ Komiku Search ]*\n`
-     ya += `> =〆 title: ${komide.title}\n`
-     ya += `> =〆 desc: ${komide.description}\n`
-     ya += `> =〆 genre: ${komide.genres}\n`
-     ya += `⏤͟͟͞͞╳────────── .✦`
-
-sock.sendMessage(m.cht, {
-         image: {
-                 url: komide.coverImage
-         },
-          caption: ya
-         }, {
-            quoted: m
-         })
-    } else {
-       const komi = await Scraper.komiku.komiku("manga", text)
-
-       let ya = ` ⏤͟͟͞͞╳─ *[ Komiku Search ]*\n\n`
-       for (let i of komi) {
-            ya += `⏤͟͟͞͞╳────────── .✦\n`
-            ya += `> =〆 title: ${i.title}\n`
-            ya += `> =〆 genre: ${i.genre}\n`
-            ya += `> =〆 desc: ${i.description}\n`
-            ya += `> =〆 url: ${i.url}\n`
-            ya += `⏤͟͟͞͞╳────────── .✦\n\n`
-   }
-            ya += `⏤͟͟͞͞╳────────── .✦`
-       m.reply(ya)
+module.exports = {
+    command: "komiku",
+    alias: ["kmi", "manga"],
+    category: ["tools"],
+    settings: {
+        limit: true
+    },
+    description: "Download/Search/Detail Komiku",
+    loading: true,
+    async run(m, {
+        sock,
+        client,
+        conn,
+        DekuGanz,
+        Func,
+        Scraper,
+        text,
+        config
+    }) {
+        switch (m.command) {
+            case "komiku":
+            case "kmi":
+            case "manga": {
+                if (!text) throw ` - \`[ Contoh ]\`\n\n> Search\n${m.prefix + m.command} <query>\n\n> Detail\n${m.prefix + m.command} <link>\n\n> download\n${m.prefix + m.command} <link> download`
+                if (text.includes("https://komiku.id/manga/")) {
+                    await Scraper.Komiku.detail(text).then(async (a) => {
+                        let caption = Func.Styles(`> ⏤͟͟͞͞╳── *[ detail ]* ── .々─ᯤ\n\n`)
+                        caption += `${Object.entries(a.metadata).map(([a, b, i]) => `> *- ${Func.Styles(`${ a.capitalize()}`)} :* ${b}`).join("\n")}\n\n`
+                        caption += Func.Styles(`> ⏤͟͟͞͞╳── *[ Chapter / ${a.chapter.length} ]* ── .々─ᯤ\n\n`)
+                        caption += a.chapter.map((a) => Object.entries(a).map(([b, c]) => `> *- ${Func.Styles(`${b.capitalize()}`)} :* ${c}`).join("\n")).join("\n\n");
+                        await sock.sendAliasMessage(m.cht, {
+                            text: caption
+                        }, a.chapter.map((a, i) => ({
+                            alias: `${i + 1}`,
+                            response: `${m.prefix + m.command} --download ${a.url}`
+                        })), m);
+                    })
+                } else if (text.includes('https://komiku.id//')) {
+                    await Scraper.Komiku.chapter(m.args[1]).then(async (a) => {
+                        let caption = `> ⏤͟͟͞͞╳── *[ download ]* ── .々─ᯤ\n\n`
+                        try {
+                            caption += `📙 Judul: ${a.metadata.judul}\n`
+                            caption += `📅 Tangga: ${a.metadata.tanggal_rilis}\n`
+                            caption += `📖 Arah Baca: ${a.metadata.arah_baca}\n\n`
+                        } catch (e) {
+                            caption += `📙 Judul: ""\n`
+                            caption += `📅 Tangga: ""\n`
+                            caption += `📖 Arah Baca: ""\n\n`
+                        }
+                        caption += `> 📁 Nih File Manga Nya`
+                        sock.sendMessage(m.cht, {
+                            document: a.buffer,
+                            caption: Func.Styles(caption),
+                            mimetype: 'application/pdf',
+                            fileName: a.metadata.judul + '.pdf'
+                        }, {
+                            quoted: m
+                        })
+                    })
+                } else if (text) {
+                    await Scraper.Komiku.search(text).then(async (a) => {
+                        let caption = Func.Styles(`> ⏤͟͟͞͞╳── *[ search / ${a.length} ]* ── .々─ᯤ\n\n`)
+                        caption += a.map((a) => Object.entries(a).map(([b, c]) => `> *- ${Func.Styles(`${b.capitalize()}`)} :* ${c}`).join("\n")).join("\n\n");
+                        caption += `\n\n> Reply Pesan Pilih \`[ Nomor ]\` Mau Nomor Berapa Terserah`
+                        await sock.sendAliasMessage(m.cht, {
+                            text: caption
+                        }, a.map((a, i) => ({
+                            alias: `${i + 1}`,
+                            response: `${m.prefix + m.command} ${a.url}`
+                        })), m)
+                    })
+                }
+            }
+            break
+        }
     }
-  }
 }
-
-module.exports = new Command();
