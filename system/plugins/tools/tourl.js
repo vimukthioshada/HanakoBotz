@@ -5,46 +5,49 @@ const {
     fromBuffer
 } = require("file-type");
 const axios = require("axios");
-const fakeUserAgent = require("fake-useragent");
-const cheerio = require("cheerio");
-const uloadUrlRegexStr = /url: "([^"]+)"/;
-const randomBytes = crypto.randomBytes(5).toString("hex");
-const fs = require('node:fs')
 
-let deku = async (m, {
-    sock,
-    Func,
-    Scraper,
-    Uploader,
-    store,
-    text,
-    config
-}) => {
+module.exports = {
+    command: "tourl",
+    alias: ["touploader"],
+    category: ["tools"],
+    settings: {
+        limit: true
+    },
+    description: "Mengconvert Media Ke Url",
+    loading: true,
+    async run(m, {
+        text,
+        Uploader,
+        Func
+    }) {
 
-    let q = m.quoted ? m.quoted : m;
-    if (!q) throw `kirim foto trus ketik .tourl \\ reply foto trus .tourl`;
+        switch (m.command) {
+            case "tourl":
+            case "touploader": {
+                let target = m.quoted ? m.quoted : m;
+                if (target.msg.mimetype) {
+                    if (!target) throw "⚠️ *Oops!* Harap kirim atau balas media (gambar/video) yang ingin diubah menjadi tautan.";
 
-    if (/audio|video|webp|sticker|image/.test(q.msg.mimetype)) {
+                    let buffer = await target.download();
+                    let caturl = await Uploader.catbox(buffer);
+                    let btchurl = await api(buffer);
 
-        let media = await (m.quoted ? m.quoted.download() : m.download())
-        const catbox = await Uploader.catbox(media)
-        const res = await api(media).catch(e => catbox)
-        m.reply(res)
-    } else {
-        m.reply(`kirim foto trus ketik .tourl \\ reply foto trus .tourl`);
+                    let caption = `✨ *Media to URL Uploader* ✨\n\n`
+                    caption += `> 📂 *Ukuran media:* ${Func.formatSize(buffer.length)}\n`;
+                    caption += `> 🔗 *Tautan hasil*\n`;
+                    caption += `> 🔗 *Tautan 1:* ${caturl}\n`;
+                    caption += `> 🔗 *Tautan 2:* ${btchurl}\n\n`
+                    caption += `💡 *Tips:* Gunakan fitur ini untuk berbagi media dengan lebih mudah tanpa perlu mengunggah ulang.`;
+
+                    m.reply(`${caption}`);
+                } else {
+                    if (!target) throw "⚠️ *Oops!* Bukan Media Gambar Foto/Video";
+                }
+            }
+            break
+        }
     }
 }
-
-deku.command = "tourl"
-deku.alias = ["touploader"]
-deku.category = ["tools"]
-deku.settings = {
-    limit: true
-}
-deku.description = "Mengconvert tourl media"
-deku.loading = true
-
-module.exports = deku
 
 const api = async (buffer) => {
     let {
