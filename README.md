@@ -88,7 +88,7 @@ module.exports = {
      },
     description: "Tes bot saja", //- Penjelasan tentang fitur nya
     loading: true, //- Ingin menambahkan loading messages ?
- async run(m, { sock, Func, Scraper, text, config }) {
+ async run(m, { sock, client, conn, DekuGanz, Func, Scraper, text, config }) {
     m.reply("> Bot Online ✓")
   }
 }
