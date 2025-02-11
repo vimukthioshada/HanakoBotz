@@ -44,18 +44,17 @@ module.exports = {
                 footer: 'pencet button di bawah ini'
             })
         if (Number(text) === 1) {
-            let code = `
-module.exports = {
-  command: "",
-  alias: [],
-  settings: { },
-  description: "",
-  async run(m, { text }) {
-      //do Something...
+            let code = `module.exports = {
+    command: "",
+    alias: [],
+    category: [],
+    settings: { },
+    description: "",
+    loading: true,
+ async run(m, { sock, client, conn, DekuGanz, Func, Scraper, text, config }) {
+    //do Something...
   }
-}
-
-module.exports = new Command();`;
+}`;
             m.reply(code);
         } else if (Number(text) === 2) {
             let code = `
@@ -68,7 +67,7 @@ class Command {
        this.description = ""
        this.loading = true
    }
-   run = async(m, { sock, Func, text, Scraper, config, store }) => {
+   run = async(m, { sock, client, conn, DekuGanz, Func, Scraper, text, config }) => {
       //do Something...
   }
 }
@@ -76,7 +75,7 @@ class Command {
 module.exports = new Command();`;
             m.reply(code);
         } else if (Number(text) === 3) {
-            let code = `let deku = async (m, { sock, Func, Scraper, Uploader, store, text, config }) => {
+            let code = `let deku = async (m, { sock, client, conn, DekuGanz, Func, Scraper, text, config }) => {
    //Do something
 }
 
