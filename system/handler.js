@@ -110,7 +110,6 @@ module.exports = async (m, sock, store) => {
       if (cmd) {
         if (plugin.loading) {
            m.react("🕐");
-           m.reply(config.messages.wait)
         }
         if (plugin.settings) {
           if (plugin.settings.owner && !m.isOwner) {
