@@ -1,6 +1,6 @@
 {
   "name": "HanakoBotz",
-  "version": "1.2.0",
+  "version": "1.2.5",
   "description": "- WhatsApp bot using Library Baileys",
   "main": "index.js",
   "type": "commonjs",
