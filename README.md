@@ -2,7 +2,7 @@
 
 ![Logo](https://cdn.anomaki.web.id/file/1738221934782.jpg)
 
-***By: creator:***
+***By creator:***
 ![logo](https://files.catbox.moe/nogonh.png)
 
 ```> Simple WhatsApp bot Using Library Baileys```
