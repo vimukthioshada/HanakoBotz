@@ -3,6 +3,12 @@ async function events(m, {
     Func,
     config
 }) {
+    const datek = new Date((new Date).toLocaleString("en-US", {
+        timeZone: "Asia/Jakarta"
+    }))
+    const hours = datek.getHours()
+    const minutes = datek.getMinutes()
+    const timeNow = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`
     if (db.list().settings.otakudesu) {
         sock.autoanime = sock.autoanime ? sock.autoanime : {}
         if (config.saluran2 in sock.autoanime) {
