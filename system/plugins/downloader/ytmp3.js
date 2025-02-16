@@ -50,28 +50,6 @@ let deku = async (m, {
     }, {
         quoted: m
     })
-    try {
-        await Scraper.ytmp3cc(text, 'mp3').then(async (a) => {
-            sock.sendMessage(m.cht, {
-                audio: {
-                    url: a.link
-                },
-                mimetype: "audio/mpeg"
-            }, {
-                quoted: m
-            })
-        })
-    } catch (err) {
-        try {
-            await axios.get('https://ytdl-api.caliphdev.com/download/audio?url=' + 'https://youtube.com/watch?v=' + videoId).then(async (a) => {
-                m.reply({
-                    audio: {
-                        url: a.data.downloadUrl
-                    },
-                    mimetype: 'audio/mpeg'
-                })
-            })
-        } catch (err) {
             try {
                 const {
                     downloadUrl
@@ -86,15 +64,18 @@ let deku = async (m, {
                 })
             } catch (err) {
                 m.reply('error' + err)
-            }
-        }
-    }
+            };
     m.react('✅')
 }
 
 deku.command = "ytmp3"
-deku.alias = ["yta", "yt-audio"]
-deku.category = ["downloader"]
+deku.alias = [
+    "yta",
+    "yt-audio"
+]
+deku.category = [
+    "downloader"
+]
 deku.settings = {
     limit: true
 }
