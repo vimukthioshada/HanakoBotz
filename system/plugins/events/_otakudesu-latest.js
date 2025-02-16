@@ -1,6 +1,7 @@
 async function events(m, {
     sock,
     Func,
+    Scraper,
     config
 }) {
     const datek = new Date((new Date).toLocaleString("en-US", {
