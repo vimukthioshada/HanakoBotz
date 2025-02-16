@@ -26,16 +26,7 @@ let deku = async (m, {
 > Type ${a.type}
 `)
 
-        await m.reply({
-            image: {
-                url: a.profilePic
-            },
-            caption: message
-        }, {
-            quoted: m
-        });
         if (a.type === "slide") {
-            await m.reply(message);
             //hapus wm?=mandul https://whatsapp.com/channel/0029VaJYWMb7oQhareT7F40V
             for (let slide of a.slides) {
                 await m.reply({
@@ -51,13 +42,20 @@ let deku = async (m, {
         // Jika media adalah video
         else if (a.type === "video") {
             if (a.videoInfo.nowm) {
-                message += ``;
                 await m.reply({
                     video: {
                         url: a.videoInfo.nowm
                     },
                     fileName: "tiktok.mp4",
-                    caption: message
+                    caption: message,
+                    buttons: [{
+                        buttonId: `.ttcompress ${a.videoInfo.nowm}`,
+                        buttonText: {
+                            displayText: 'Video Compress'
+                        }
+                    }],
+                    viewOnce: true,
+                    headerType: 6
                 }, {
                     quoted: m
                 });
@@ -79,8 +77,14 @@ let deku = async (m, {
 }
 
 deku.command = "tiktok"
-deku.alias = ["tt", "ttdl", "tiktokdl"]
-deku.category = ["downloader"]
+deku.alias = [
+    "tt",
+    "ttdl",
+    "tiktokdl"
+]
+deku.category = [
+    "downloader"
+]
 deku.settings = {
     limit: true
 }
