@@ -179,23 +179,24 @@ module.exports = async (m,
     }
     try {
     switch (m.command) {
-   case "rvo":
-   case "readviewonce": {
+    case "rvo":
+    case "readviewonce": {
     const baileys = require('baileys')
-    if (!m.quoted) throw 'Reply Pesan Kalau Mau Rvo'
-    let type = Object.keys(msg)[0]
-    let media = await baileys.downloadContentFromMessage(msg[type], type == 'imageMessage' ? 'image' : 'video')
-    let buffer = Buffer.from([])
-    for await (const chunk of media) {
-        buffer = Buffer.concat([buffer, chunk])
-    }
-    if (/video/.test(type)) {
-      return sock.sendFile(m.cht, buffer, 'media.mp4', msg[type].caption || '', m)
-       } else if (/image/.test(type)) {
-          return sock.sendFile(m.cht, buffer, 'media.jpg', msg[type].caption || '', m)
-          } else {
-            m.reply('Maaf Ft Nya Gagal Di Rvo😂')
-          }
+      if (!m.quoted) throw `Reply ke view once message`
+      let msg = m.quoted.message
+      let type = Object.keys(msg)[0]
+      let media = await baileys.downloadContentFromMessage(msg[type], type == 'imageMessage' ? 'image' : 'video')
+      let buffer = Buffer.from([])
+             for await (const chunk of media) {
+                buffer = Buffer.concat([buffer, chunk])
+             }
+           if (/video/.test(type)) {
+              return sock.sendFile(m.cht, buffer, 'media.mp4', msg[type].caption || '', m)
+           } else if (/image/.test(type)) {
+             return sock.sendFile(m.cht, buffer, 'media.jpg', msg[type].caption || '', m)
+           } else {
+             m.reply('gagal rvo file😂')
+           }
         }
         break;
         case "wm":
