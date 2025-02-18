@@ -1,56 +1,53 @@
-const fetch = require('node-fetch')
+const axios = require('axios')
 
 let deku = async (m, {
+    sock,
     client,
+    conn,
+    DekuGanz,
     Func,
     Scraper,
-    Uploader,
-    store,
     text,
     config
 }) => {
+    if (!/www.mediafire.com/.test(text)) throw 'mana link MediaFire nya?'
+    if (Func.isUrl(text)) {
+        const mf = await axios.post('https://fgsi-mediafire.hf.space/', {
+            url: text
+        }, {
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            }
+        })
 
-    if (!text.includes('www.mediafire.com')) throw 'Link Mf Nya?'
+        m.reply(Object.entries(mf.data.data).map(([b, c]) => `> *- ${Func.Styles(`${b.capitalize()}`)} :* ${c}`).join("\n"))
 
-    const ya = await fetch(`https://api.ryzendesu.vip/api/downloader/mediafire?url=${text}`)
-
-    const mf = await ya.json()
-
-    if (!mf) return m.reply('maaf link Mf failed')
-
-    let caption = ` - 々 \`[ Downloader - Mediafire ]\` 々 -\n\n`
-    caption += `> FileName: ${mf.filename}
-> Ready: ${mf.ready}
-> Created: ${mf.created}
-> Desc: ${mf.description}
-> Size: ${mf.size}
-> Mimetype: ${mf.mimetype}
-> Owner: ${mf.owner}
-
-> Otw Di Kirim File nya
-`
-
-    m.reply(Func.Styles(caption))
-
-    await client.sendMessage(m.cht, {
-        document: {
-            url: mf.download
-        },
-        mimetype: mf.mimetype,
-        fileName: mf.filename
-    }, {
-        quoted: m.fkontak
-    })
-
+        await sock.sendMessage(m.cht, {
+            document: {
+                url: mf.data.data.download
+            },
+            mimetype: mf.data.data.mimetype,
+            fileName: mf.data.data.filename,
+            caption: 'done'
+        }, {
+            quoted: m.fmeta
+        })
+    }
 }
 
 deku.command = "mediafire"
-deku.alias = ["mf", "mfdl"]
-deku.category = ["downloader"]
+deku.alias = [
+    "mfdl",
+    "mf"
+]
+deku.category = [
+    "downloader"
+]
 deku.settings = {
     limit: true
 }
-deku.description = "Mendownload File MediaFire"
+deku.description = "Mendownload Mediafire"
 deku.loading = true
 
 module.exports = deku
