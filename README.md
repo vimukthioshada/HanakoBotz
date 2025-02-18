@@ -1,6 +1,6 @@
 ***HanakoBotz | 1.2.5*** | ***Create By: deku || base: script Axel network***
 
-![Logo](https://cdn.anomaki.web.id/file/1738221934782.jpg)
+![Logo](https://files.catbox.moe/movzsb.jpg)
 
 ***By creator:***
 ![logo](https://files.catbox.moe/nogonh.png)
