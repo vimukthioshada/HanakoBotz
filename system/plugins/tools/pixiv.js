@@ -1,116 +1,184 @@
-const {
-    BufferJSON,
-    WA_DEFAULT_EPHEMERAL,
-    generateWAMessageFromContent,
-    proto,
-    getBinaryNodeChildren,
-    generateWAMessageContent,
-    generateWAMessage,
-    prepareWAMessageMedia,
-    areJidsSameUser,
-    getContentType,
-    downloadContentFromMessage
-} = require('baileys');
+const crypto = require("crypto");
+const axios = require("axios");
+const fs = require("fs");
 
-module.exports = {
-    command: "pixiv", //- Nama fitur nya
-    alias: ["px"], //- Short cut command
-    category: ["anime"], //- Kategori Fitur 
-    settings: {
-        owner: true, //-  Apakah Fitur ini khusus owner ?
-        group: false, // - Apakah Fitur ini khusus group ?
-    },
-    description: "anime nsfw 18+", //- Penjelasan tentang fitur nya
-    loading: true, //- Ingin menambahkan loading messages ?
-    async run(m, {
+class Command {
+    constructor() {
+        this.command = "pixiv"
+        this.alias = [
+            "pvsrch",
+            "pixivsearch"
+        ]
+        this.category = [
+            "tools"
+        ]
+        this.settings = {
+            limit: true
+        }
+        this.description = "Search Foto Pixiv"
+        this.loading = true
+    }
+    run = async (m, {
         sock,
+        client,
+        conn,
+        DekuGanz,
         Func,
         Scraper,
         text,
         config
-    }) {
-        if (!text) throw `\`<!>\` Anda Mau Apa Link Or Search\n\n contoh:\nsearch: .pixiv todoroki\\tags\nlink: .pixiv www.pixiv.net/xxxx`
-        if (/www.pixiv.net/.test(text)) {
-            const hasil = await Scraper.pixivdl(text)
+    }) => {
 
-            for (let i of hasil.media) {
-                await sock.sendFile(m.cht, i, 'image/png', 'done')
-            }
-        } else {
-            async function createImage(url) {
-                const {
-                    imageMessage
-                } = await generateWAMessageContent({
-                    image: url
-                }, {
-                    upload: sock.waUploadToServer
-                });
-                return imageMessage;
-            }
+        if (!text) throw Func.Styles(`
+Pilih mau type apa
 
-            function shuffleArray(array) {
-                for (let i = array.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [array[i], array[j]] = [array[j], array[i]];
-                }
-            }
+\`[ Biasa ]\` ${m.prefix + m.command} <query>
+\`[ Manga ]\` ${m.prefix + m.command} <query> --manga
+\`[ Novel ]\` ${m.prefix + m.command} <query> --novel
+\`[ Works ]\` ${m.prefix + m.command} <query> --works
+`)
 
-            let push = [];
-
-            const hasil = await Scraper.pixivdl(text)
-
-            shuffleArray(hasil.media); // Randomize arrays
-            let ult = hasil.media.splice(0, 5); // Takes the first 10 images from a randomized array
-            let i = 1;
-            for (let lucuy of ult) {
-                push.push({
-                    body: proto.Message.InteractiveMessage.Body.fromObject({
-                        text: `done search ${text}`
-                    }),
-                    footer: proto.Message.InteractiveMessage.Footer.fromObject({
-                        text: config.name
-                    }),
-                    header: proto.Message.InteractiveMessage.Header.fromObject({
-                        title: `Image - ${i++}`,
-                        hasMediaAttachment: true,
-                        imageMessage: await createImage(lucuy)
-                    }),
-                    nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.fromObject({
-                        buttons: [{}]
-                    })
-                });
-            }
-            const bot = generateWAMessageFromContent(m.cht, {
-                viewOnceMessage: {
-                    message: {
-                        messageContextInfo: {
-                            deviceListMetadata: {},
-                            deviceListMetadataVersion: 2
-                        },
-                        interactiveMessage: proto.Message.InteractiveMessage.fromObject({
-                            body: proto.Message.InteractiveMessage.Body.create({
-                                text: `< ! > Halo ${m.pushName}`
-                            }),
-                            footer: proto.Message.InteractiveMessage.Footer.create({
-                                text: config.name
-                            }),
-                            header: proto.Message.InteractiveMessage.Header.create({
-                                hasMediaAttachment: false
-                            }),
-                            carouselMessage: proto.Message.InteractiveMessage.CarouselMessage.fromObject({
-                                cards: [
-                                    ...push
-                                ]
-                            })
-                        })
-                    }
-                }
+        if (m.args[1] == "--manga") {
+            const getft = await pixiv.pixivNet(m.args[0])
+            let pickget = getft.manga[Math.floor(Math.random() * getft.manga.length)]
+            const {
+                get: data
+            } = await pixiv.getImagesFromPixiv(pickget.url)
+            sock.sendMessage(m.cht, {
+                image: fs.readFileSync(data),
+                caption: "done"
             }, {
                 quoted: m
+            })
+        } else if (m.args[1] == "--novel") {
+            const getft = await pixiv.pixivNet(m.args[0])
+            let pickget = getft.novel[Math.floor(Math.random() * getft.novel.length)]
+            const {
+                get: data
+            } = await pixiv.getImagesFromPixiv(pickget.url)
+            sock.sendMessage(m.cht, {
+                image: fs.readFileSync(data),
+                caption: "done"
+            }, {
+                quoted: m
+            })
+        } else if (m.args[1] == "--works") {
+            const getft = await pixiv.pixivNet(m.args[0])
+            let pickget = getft.works[Math.floor(Math.random() * getft.works.length)]
+            const {
+                get: data
+            } = await pixiv.getImagesFromPixiv(pickget.url)
+            sock.sendMessage(m.cht, {
+                image: fs.readFileSync(data),
+                caption: "done"
+            }, {
+                quoted: m
+            })
+        } else if (text) {
+            const getft = await pixiv.pixivNet(text)
+            let pickget = getft.illusts[Math.floor(Math.random() * getft.illusts.length)]
+            const {
+                get: data
+            } = await pixiv.getImagesFromPixiv(pickget.url)
+            sock.sendMessage(m.cht, {
+                image: fs.readFileSync(data),
+                caption: "done"
+            }, {
+                quoted: m
+            })
+            await fs.unlinkSync(data)
+        }
+    }
+}
+
+module.exports = new Command();
+
+function generateHash(input) {
+    return crypto.createHash('sha1').update(input).digest('hex');
+}
+
+const pixiv = {
+    pixivNet: async (query) => {
+        let hash = await generateHash(query);
+        let {
+            data: pixiv
+        } = await axios.get(`https://pixiv.net/touch/ajax/tag_portal?word=${query}&lang=id&version=${hash}`)
+        const getft = pixiv.body
+        const works = getft.popularWorks.map((a) => {
+            const tags = a.tags
+            const title = a.title
+            const url = a.url
+            return {
+                title: title,
+                tags: tags,
+                url: url
+            }
+        })
+        const illusts = getft.illusts.map((a) => {
+            const tags = a.tags
+            const title = a.title
+            const url = a.url
+            return {
+                title: title,
+                tags: tags,
+                url: url
+            }
+        })
+        const manga = getft.manga.map((a) => {
+            const tags = a.tags
+            const title = a.title
+            const url = a.url
+            return {
+                title: title,
+                tags: tags,
+                url: url
+            }
+        })
+        const novel = getft.novels.map((a) => {
+            const tags = a.tags
+            const title = a.title
+            const url = a.url
+            return {
+                title: title,
+                tags: tags,
+                url: url
+            }
+        })
+        return {
+            works,
+            illusts,
+            manga,
+            novel
+        }
+    },
+
+    getImagesFromPixiv: async (urlImages) => {
+        const headers = {
+            "Referer": "https://www.pixiv.net/",
+            "User-Agent": "Mozilla/5.0 (Linux; Android 10; Mobile; rv:119.0) Gecko/119.0 Firefox/119.0",
+            "Accept": "image/avif,image/webp,*/*",
+            "Accept-Language": "en-US,en;q=0.9",
+            "DNT": "1"
+        };
+
+        try {
+            const {
+                data
+            } = await axios.get(urlImages, {
+                headers,
+                responseType: "arraybuffer"
             });
-            await sock.relayMessage(m.cht, bot.message, {
-                messageId: bot.key.id
-            });
+            const file = "./tmp/" + Date.now() + ".jpg"
+            fs.mkdirSync("./tmp", {
+                recursive: true
+            })
+            fs.writeFileSync(file, data);
+
+            return {
+                get: file
+            }
+        } catch (err) {
+            console.error("Gagal download:", err.message);
         }
     }
 }
