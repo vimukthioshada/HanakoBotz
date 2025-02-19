@@ -6,12 +6,12 @@ const config = {
     ownername: 'ʟᴇᴏᴏxᴢʏ', 
     ownername2: 'ᴅᴇᴋᴜ',
     prefix: [".", "?", "!", "/", "#"], //Tambahin sendiri prefix nya kalo kurang
-    wagc: 'https://whatsapp.com/channel/0029VaG9VfPKWEKk1rxTQD20',
+    wwagc: 'https://chat.whatsapp.com/JyeT1hdCPJeLy95tzx5eyI',
     saluran: '120363279195205552@newsletter', 
     jidgroupnotif: '120363266755712733@g.us', 
     saluran2: '120363335701540699@newsletter', 
     jidgroup: '120363267102694949@g.us', 
-    jidch: '120363279195205552@newsletter', 
+    wach: 'https://whatsapp.com/channel/0029VadFS3r89inc7Jjus03W', 
     sessions: "sessions",
     sticker: {
       packname: "〆 ʜᴀɴᴀᴋᴏ-ᴋᴜɴ-ʙᴏᴛᴢ",
