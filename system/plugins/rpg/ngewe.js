@@ -4,7 +4,7 @@ module.exports = {
    category: ["rpg"],
    settings: {},
    async run(m, { sock, config, Scraper }) {
-      if (!db.list().user[m.sender].premium.status === false) throw 'maaf anda harus premium dulu😏'
+      if (!db.list().user[m.sender].premium.status == true) throw 'maaf anda harus premium dulu😏'
       let usr = db.list().user[m.sender];
       if (!usr || !usr.rpg) {
          return m.reply("Data RPG tidak ditemukan. Silakan mulai permainan terlebih dahulu.");
