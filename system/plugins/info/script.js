@@ -8,6 +8,7 @@ module.exports = {
     description: "Dapatkan Script bot secara gratis",
     async run(m, {
         sock,
+        client,
         Func,
         config
     }) {
@@ -26,29 +27,37 @@ module.exports = {
 │    =〆 https://whatsapp.com/channel/0029VadFS3r89inc7Jjus03W
 ⏤͟͟͞͞╳────────── .✦`
 
-        await m.reply({
-            document: fs.readFileSync("./image/doc.txt"),
-            fileName: Func.Styles(`Sc ${config.name}`),
-            mimetype: 'application/msword',
-            jpegThumbnail: await sock.resize(fs.readFileSync("./image/Hanako-replydoc.jpg"), 356, 200),
-            caption: tekssc,
-            buttons: [{
-                buttonId: ".tqto",
-                buttonText: {
-                    displayText: 'Thanks you to'
-                }
-            }],
-            viewOnce: true,
-            headerType: 6,
+        m.reply({
+            location: {
+                degreesLatitude: 0,
+                degreesLongitude: 0,
+                name: Func.Styles(`${config.name}`),
+                address: Func.Styles(`© ${config.name} 2021 - 2024`),
+                isLive: true,
+                jpegThumbnail: await sock.resize(fs.readFileSync('./image/Hanako-replydoc.jpg'), 300, 170)
+            },
+            caption: "",
+            footer: config.name,
+            title: tekssc,
+            subtitle: "",
             contextInfo: {
-                isForwarded: true,
-                forwardingScore: 99999,
+                mentionedJid: [m.sender],
+                isForwarded: !0,
+                forwardingScore: 127,
                 forwardedNewsletterMessageInfo: {
                     newsletterJid: config.saluran,
-                    serverMessageId: -1,
-                    newsletterName: `${Func.Styles(`Script By: ${config.ownername}`)}`,
+                    newsletterName: config.name,
+                    serverMessageId: -1
                 }
-            }
-        });
+            },
+            interactiveButtons: [{
+                name: "cta_url",
+                buttonParamsJson: JSON.stringify({
+                    display_text: Func.Styles("Link Script 📙"),
+                    url: "https://github.com/LeooxzyDekuu/HanakoBotz",
+                    merchant_url: "https://github.com/LeooxzyDekuu/HanakoBotz"
+                })
+            }]
+        })
     },
 };
