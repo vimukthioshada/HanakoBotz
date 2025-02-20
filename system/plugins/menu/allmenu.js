@@ -103,7 +103,7 @@ ${matches.map((a, i) => `│    =〆 ${m.prefix + a}`).join("\n")}`);
 
     m.reply({
         video: {
-            url: "https://files.catbox.moe/e6lznj.mp4"
+            url: "https://files.catbox.moe/f1l5ij.mp4"
         },
         caption: caption,
         gifPlayback: true,
@@ -121,7 +121,7 @@ ${matches.map((a, i) => `│    =〆 ${m.prefix + a}`).join("\n")}`);
                 body: `${config.ownername2} | ` + date,
                 mediaType: 1,
                 thumbnail: fs.readFileSync('./image/DekuThumb.jpg'),
-                renderLargerThumbnail: true,
+                renderLargerThumbnail: false,
                 sourceUrl: "https://www.tiktok.com/@leooxzy_ganz/",
             }
         }

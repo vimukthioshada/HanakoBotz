@@ -24,8 +24,7 @@ module.exports = async (m, sock, store) => {
   await db.main(m);
   if (m.isBot) return;
   if (db.list().settings.self && !m.isOwner) return;
-  if (m.isGroup && db.list().group[m.cht]?.mute && !m.isOwner) return;
-  
+  if (m.isGroup && db.list().group[m.cht]?.mute && !m.isAdmin && !m.isOwner) return;
   if (Object.keys(store.groupMetadata).length === 0) {
     store.groupMetadata = await sock.groupFetchAllParticipating();
   }
