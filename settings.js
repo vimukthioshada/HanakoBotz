@@ -1,10 +1,10 @@
 const fs = require('node:fs');
 
 const config = {
-    owner: ["6283136099660"],
-    name: "ʜᴀɴᴀᴋᴏ-ᴋᴜɴ-ʙᴏᴛᴢ",
-    ownername: 'ʟᴇᴏᴏxᴢʏ', 
-    ownername2: 'ᴅᴇᴋᴜ',
+    owner: ["94755773910"],
+    name: "OSHADA",
+    ownername: 'OSHADA', 
+    ownername2: 'OSDA',
     prefix: [".", "?", "!", "/", "#"], //Tambahin sendiri prefix nya kalo kurang
     wwagc: 'https://chat.whatsapp.com/JyeT1hdCPJeLy95tzx5eyI',
     saluran: '120363279195205552@newsletter', 
