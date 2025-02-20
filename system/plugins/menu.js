@@ -1,10 +1,6 @@
 const moment = require("moment-timezone");
 const axios = require('axios');
 const fs = require('node:fs')
-const baileys = require('baileys')
-const {
-    generateWAMessageContent
-} = baileys
 const path = require("node:path");
 const process = require('process');
 const {
@@ -223,12 +219,17 @@ Kalau Error Bisa Hubungi Ke .owner gass`
             title: 'Click Here⎙',
             sections
         };
-        sock.sendMessage(m.cht, {
-            document: fs.readFileSync("./image/doc.txt"),
-            fileName: `Sc ${config.name}`,
-            mimetype: 'application/msword',
-            jpegThumbnail: fs.readFileSync("./image/Hanako-replydoc.jpg"),
+        m.reply({
+            location: {
+                degreesLatitude: 0,
+                degreesLongitude: 0,
+                isLive: true,
+                jpegThumbnail: await sock.resize(fs.readFileSync('./image/Hanako-kun.jpg'), 300, 170)
+            },
             caption: xmenu_oh,
+            footer: Func.Styles(config.name),
+            title: "",
+            subtitle: "",
             contextInfo: {
                 mentionedJid: [m.sender],
                 isForwarded: !0,
@@ -237,41 +238,20 @@ Kalau Error Bisa Hubungi Ke .owner gass`
                     newsletterJid: config.saluran,
                     newsletterName: config.name,
                     serverMessageId: -1
-                },
-                externalAdReply: {
-                    title: `々 ${config.name}`,
-                    body: config.ownername2,
-                    mediaType: 1,
-                    thumbnail: fs.readFileSync('./image/Hanako-kun.jpg'),
-                    renderLargerThumbnail: true,
-                    sourceUrl: "https://www.tiktok.com/@leooxzy_ganz/",
                 }
             },
-            footer: Func.Styles(config.name),
-            buttons: [{
-                    buttonId: `${m.prefix} ceklogs`,
-                    buttonText: {
-                        displayText: 'Cek Logs'
-                    },
-                    type: 1,
-                },
-                {
-                    buttonId: 'action',
-                    buttonText: {
-                        displayText: 'ini pesan interactiveMeta'
-                    },
-                    type: 4,
-                    nativeFlowInfo: {
-                        name: 'single_select',
-                        paramsJson: JSON.stringify(listMessage),
-                    },
-                },
-            ],
-            headerType: 1,
-            viewOnce: true
-        }, {
-            quoted: m
-        });
+            interactiveButtons: [{
+                name: 'single_select',
+                buttonParamsJson: JSON.stringify(listMessage)
+            }, {
+                name: "cta_url",
+                buttonParamsJson: JSON.stringify({
+                    display_text: Func.Styles("Link Channel👤"),
+                    url: config.wagc,
+                    merchant_url: config.wagc
+                })
+            }]
+        })
 
         await m.reply({
             audio: {
