@@ -226,9 +226,9 @@ Kalau Error Bisa Hubungi Ke .owner gass`
                 isLive: true,
                 jpegThumbnail: await sock.resize(fs.readFileSync('./image/Hanako-kun.jpg'), 300, 170)
             },
-            caption: xmenu_oh,
+            caption: "",
             footer: Func.Styles(config.name),
-            title: "",
+            title: xmenu_oh,
             subtitle: "",
             contextInfo: {
                 mentionedJid: [m.sender],
