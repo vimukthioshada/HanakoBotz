@@ -3,6 +3,9 @@
  * Suara juga gak muncul, jadi pakai spawn aja
  */
 
+// Btw Ini Ytdl distube nya support vps
+// Amd epyc, xeon, ryzen
+
 const YTDL = require('@distube/ytdl-core')
 const { spawn } = require('child_process')
 const fs = require('fs')
@@ -86,6 +89,7 @@ async function Ytdl(url, type, qual = null) {
             },
             file_name: filename,
             getaudio,
+            file_path,
             file_size
         }
     }
@@ -153,6 +157,7 @@ async function Ytdl(url, type, qual = null) {
         },
         file_name: filename,
         getvideo,
+        video_path,
         file_size
     }
 }
