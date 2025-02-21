@@ -7,8 +7,10 @@
   "directories": {
     "lib": "lib"
   },
-  "scripts": {
-    "start": "node index.js"
+    "scripts": {
+    "start": "pm2 start index.js --deep-monitoring --attach --name WOLF_MD",
+    "stop": "pm2 stop WOLF_MD",
+    "restart": "pm2 restart WOLF_MD"
   },
   "repository": {
     "url": "git+https://github.com/LeooxzyDekuu/HanakoBotz.git"
