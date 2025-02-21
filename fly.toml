@@ -1,0 +1,12 @@
+# Fly.io App Configuration
+app = "HanakoBotz"
+primary_region = "sin" # Change this based on your preferred region
+
+[build]
+  dockerfile = "Dockerfile"
+
+[deploy]
+  strategy = "rolling"
+
+[env]
+  NODE_ENV = "production"
