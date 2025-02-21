@@ -73,46 +73,28 @@ class Command {
         capt += `> • ᴜʀʟ: ${result.url}`
         try {
             const distu = await Scraper.distubeyt(text, "mp4", 720)
-          if (distu.getvideo) {
-            capt += `\n> • Download: V1 Distube`
-            sock.sendMessage(m.cht, {
-                video: distu.getvideo,
-                mimetype: 'video/mp4',
-                fileName: result.title + '.mp4',
-                caption: capt
-            }, {
-                quoted: m
-            })
-          }
-        await fs.unlinkSync(file_path)
-        } catch (err) {
-            try {
-                const {
-                    link
-                } = await Scraper.ytmp3cc(text, 'mp4')
-              if (link) {
-                capt += `\n> • Download: V2 Ytmp3cc`
+            if (distu.getvideo) {
+                capt += `\n> • Download: V1 Distube`
                 sock.sendMessage(m.cht, {
-                    video: {
-                        url: link
-                    },
+                    video: distu.getvideo,
                     mimetype: 'video/mp4',
                     fileName: result.title + '.mp4',
                     caption: capt
                 }, {
                     quoted: m
                 })
-              }
-            } catch (err) {
-                try {
-                  const {
-                     downloadUrl
-                  } = await Scraper.ddownr.download(text, '720')
-                   if (downloadUrl) {
-                    capt += `\n> • Download: V3 Ddownr`
+                await fs.unlinkSync(file_path)
+            }
+        } catch (err) {
+            try {
+                const {
+                    link
+                } = await Scraper.ytmp3cc(text, 'mp4')
+                if (link) {
+                    capt += `\n> • Download: V2 Ytmp3cc`
                     sock.sendMessage(m.cht, {
                         video: {
-                            url: downloadUrl
+                            url: link
                         },
                         mimetype: 'video/mp4',
                         fileName: result.title + '.mp4',
@@ -120,7 +102,25 @@ class Command {
                     }, {
                         quoted: m
                     })
-                  }
+                }
+            } catch (err) {
+                try {
+                    const {
+                        downloadUrl
+                    } = await Scraper.ddownr.download(text, '720')
+                    if (downloadUrl) {
+                        capt += `\n> • Download: V3 Ddownr`
+                        sock.sendMessage(m.cht, {
+                            video: {
+                                url: downloadUrl
+                            },
+                            mimetype: 'video/mp4',
+                            fileName: result.title + '.mp4',
+                            caption: capt
+                        }, {
+                            quoted: m
+                        })
+                    }
                 } catch (err) {
                     m.reply('error' + err)
                 }
