@@ -42,23 +42,16 @@ let deku = async (m, {
         // Jika media adalah video
         else if (a.type === "video") {
             if (a.videoInfo.nowm) {
-                await m.reply({
+                message += `\n\n> Reply Video Trus Ketik \`[ Compress ]\``
+                await sock.sendAliasMessage(m.cht, {
                     video: {
                         url: a.videoInfo.nowm
                     },
-                    fileName: "tiktok.mp4",
                     caption: message,
-                    buttons: [{
-                        buttonId: `.ttcompress ${a.videoInfo.nowm}`,
-                        buttonText: {
-                            displayText: 'Video Compress'
-                        }
-                    }],
-                    viewOnce: true,
-                    headerType: 6
-                }, {
-                    quoted: m
-                });
+                }, [{
+                    alias: 'Compress',
+                    response: `.ttcompress ${a.videoInfo.nowm}`
+                }], m)
             } else {
                 m.reply(m.chat, "Gagal mengambil video tanpa watermark.");
             }
