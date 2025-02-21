@@ -83,7 +83,6 @@ class Command {
             }, {
                 quoted: m
             })
-            await fs.unlinkSync(file_path)
         } catch (err) {
             try {
                 const {
