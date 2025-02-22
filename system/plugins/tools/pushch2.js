@@ -1,27 +1,27 @@
-const { writeExif, videoToWebp } = require(process.cwd()+"/lib/sticker");
+const ya = require("js-beautify")
+const {
+    writeExif,
+    videoToWebp
+} = require(process.cwd() + "/lib/sticker");
 
-module.exports = {
-    command: "pushch2",
-    alias: ["psch2"],
-    category: ["tools"],
-    settings: {
-        limit: true,
-    },
-    description: "PushCh",
-    loading: true,
-    async run(m, {
-        text,
-        sock,
-        Scraper,
-        Func,
-        config
-    }) {
-        let q = m.quoted ? m.quoted : m;
-        let media = await q.download()
-        let pp = await sock.profilePictureUrl(m.sender, 'image')
-        if (/audio/.test(q.msg.mimetype)) {
+let yukio = async (m, {
+    sock,
+    client,
+    conn,
+    DekuGanz,
+    Func,
+    Scraper,
+    text,
+    config
+}) => {
+    let quoted = m.quoted ? m.quoted : m;
+    let pp = await sock.profilePictureUrl(m.sender, 'image')
+
+    let captions = quoted.text || "requires chat: ?"
+
+    if (/audio/.test(quoted.msg.mimetype)) {
         await sock.sendMessage(config.saluran, {
-            audio: media,
+            audio: await quoted.download(),
             mimetype: 'audio/mpeg',
             ptt: true,
             contextInfo: {
@@ -42,10 +42,10 @@ module.exports = {
                 }
             }
         })
-       } else if (/video/.test(q.msg.mimetype)) {
+    } else if (/video/.test(quoted.msg.mimetype)) {
         await sock.sendMessage(config.saluran, {
-            video: media,
-            caption: text,
+            video: await quoted.download(),
+            caption: captions,
             contextInfo: {
                 mentionedJid: [m.sender],
                 isForwarded: !0,
@@ -54,13 +54,13 @@ module.exports = {
                     newsletterJid: config.saluran,
                     newsletterName: `ᴘᴜsʜᴄʜ | ` + config.name,
                     serverMessageId: -1
-              }
-           }
+                }
+            }
         })
-       } else if (/image/.test(q.msg.mimetype)) {
+    } else if (/image/.test(quoted.msg.mimetype)) {
         await sock.sendMessage(config.saluran, {
-            audio: media,
-            caption: text,
+            image: await quoted.download(),
+            caption: captions,
             contextInfo: {
                 mentionedJid: [m.sender],
                 isForwarded: !0,
@@ -79,17 +79,14 @@ module.exports = {
                 }
             }
         })
-       } else if (/sticker/.test(q.msg.mimetype)) {
-        let stickerte = await writeExif(
-          {
+    } else if (/sticker/.test(quoted.msg.mimetype)) {
+        let stickerte = await writeExif({
             mimetype: await q.msg.mimetype,
-            data: media,
-          },
-          {
+            data: await quoted.download(),
+        }, {
             packName: config.sticker.packname,
             packPublish: config.sticker.author,
-          },
-        );
+        }, );
         await sock.sendMessage(config.saluran, {
             sticker: stickerte,
             contextInfo: {
@@ -110,9 +107,9 @@ module.exports = {
                 }
             }
         })
-       } else {
+    } else if (captions) {
         await sock.sendMessage(config.saluran, {
-            text: text,
+            text: captions,
             contextInfo: {
                 mentionedJid: [m.sender],
                 isForwarded: !0,
@@ -131,6 +128,16 @@ module.exports = {
                 }
             }
         })
-      }
-    },
-};
+    } else m.reply('maaf anda bisa kirim audio, video, image, teks aja yg lain gabisa😂')
+}
+
+yukio.command = "pushch2"
+yukio.alias = ["pshch2", "psch2"]
+yukio.category = ["tools"]
+
+yukio.settings = {
+    owner: true
+}
+yukio.loading = true
+
+module.exports = yukio
