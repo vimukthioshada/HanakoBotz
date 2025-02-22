@@ -53,7 +53,7 @@ async function Ytdl(url, type, qual = null) {
     const file_id = await randomKarakter(8)
 
     if (type === 'mp3') {
-        const file_path = `./lib/${file_id}.mp3`
+        const file_path = `./tmp/${file_id}.mp3`
         const stream = YTDL(url, { filter: 'audioonly', requestOptions: { headers: { Cookie: cookie } } })
 
         const ffmpeg = spawn('ffmpeg', ['-i', 'pipe:0', '-b:a', '192k', '-preset', 'ultrafast', file_path])
@@ -109,7 +109,7 @@ async function Ytdl(url, type, qual = null) {
 
     if (!format_video) return { availableFormats: formats }
 
-    const video_path = `./lib/${file_id}.mp4`
+    const video_path = `./tmp/${file_id}.mp4`
 
     const video_stream = YTDL(url, { quality: format_video.itag, requestOptions: { headers: { Cookie: cookie } } })
     const audio_stream = YTDL(url, { quality: format_audio.itag, requestOptions: { headers: { Cookie: cookie } } })
