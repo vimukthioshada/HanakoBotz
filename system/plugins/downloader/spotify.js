@@ -18,11 +18,10 @@ let rinokumura = {
         text,
         config
     }) {
-        const quoted = m.quoted ? m.quoted : m;
-        if (!quoted.text) return m.reply('> masukan link/query/reply')
+        if (!text) return m.reply('> masukan link/query')
 
-        if (/open.spotify.com/.test(quoted.text)) {
-            await spotify.getMetadata(quoted.text).then(async (a) => {
+        if (/open.spotify.com/.test(text)) {
+            await spotify.getMetadata(text).then(async (a) => {
                 let captions = `📁 Download Spotify
 > • Title: ${a.data.title}
 > • Artist: ${a.data.artists}
@@ -53,8 +52,8 @@ let rinokumura = {
                     quoted: m
                 })
             })
-        } else if (quoted.text) {
-            search(quoted.text).then(async (a) => {
+        } else if (text) {
+            search(text).then(async (a) => {
                 let no = 1
                 let captions = `🔍 Search Spotify\n`
                 for (let i of a) {
