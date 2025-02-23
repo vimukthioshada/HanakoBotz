@@ -63,7 +63,7 @@ let rinokumura = {
                     buttons: [{
                         buttonId: `.tthd ${text}`,
                         buttonText: {
-                            displayText: 'Video'
+                            displayText: 'Video Hd'
                         }
                     }]
                 }, {
