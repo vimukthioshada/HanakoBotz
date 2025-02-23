@@ -32,8 +32,8 @@ let rinokumura = {
 > • Unique: ${dl.author.unique_id || ''}
 `
             if (a.type === "slide") {
-                caption += `> • Slide: ${a.image ? 'false' : 'true'}
-> • Hd Video: ${a.video_hd ? 'false' : 'true'}
+                caption += `> • Slide: ${a.image ? 'true' : 'false'}
+> • Hd Video: ${a.video_hd ? 'true' : 'false'}
 `
                 let medias = []
                 for (let i of a.image) {
