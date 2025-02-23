@@ -20,6 +20,7 @@ let rinokumura = {
     }) {
         if (!/vt.tiktok.com/.test(text) && !/vm.tiktok.com/.test(text) && !/tiktok.com/.test(text)) throw `> masukan link tiktok nya`
         const dl = await ttwm.dl(text)
+        let input = m.isQuoted ? m.quoted.body : text;
         await Scraper.musicaldown(text).then(async (a) => {
             let caption = `📁 Downloader Tiktok\n`
             caption += `> • Title: ${dl.title || ''}
@@ -31,6 +32,9 @@ let rinokumura = {
 > • Unique: ${dl.author.unique_id || ''}
 `
             if (a.type === "slide") {
+                caption += `> • Slide: ${a.image ? 'false' : 'true'}
+> • Hd Video: ${a.video_hd ? 'false' : 'true'}
+`
                 let medias = []
                 for (let i of a.image) {
                     medias.push({
@@ -45,15 +49,36 @@ let rinokumura = {
                     quoted: m
                 })
             } else if (a.type === "video") {
+                caption += `> • Slide: ${a.image ? 'true' : 'false'}
+> • Hd Video: ${a.video_hd ? 'false' : 'true'}
+`
                 client.sendMessage(m.cht, {
                     video: {
-                        url: a.video_hd
+                        url: a.video
                     },
-                    caption: caption
+                    caption: caption,
+                    footer: config.ownername,
+                    viewOnce: true,
+                    headerType: 6,
+                    buttons: [{
+                        buttonId: `.tthd ${text}`,
+                        buttonText: {
+                            displayText: 'Video'
+                        }
+                    }]
                 }, {
                     quoted: m
                 })
             }
+            await sock.delay(20000)
+            sock.sendMessage(m.cht, {
+                audio: {
+                    url: a.audio
+                },
+                mimetype: 'audio/mpeg'
+            }, {
+                quoted: m
+            })
         })
     }
 }
