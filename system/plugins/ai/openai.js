@@ -10,6 +10,7 @@ let Yukio = async (m, {
     text,
     config
 }) => {
+    if (!text) throw '> Masukan Kata Kata!'
     const api = 'https://fgsi-ai.hf.space/'
     const {
         data: ai
