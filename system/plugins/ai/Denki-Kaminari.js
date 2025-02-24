@@ -53,7 +53,7 @@ async function DenkiChat(prompt) {
     chatCompletion = await client.chat.completions.create({
         messages: [{
                 role: "system",
-                content: "kamu ai bakugo kacchan, dari anime my hero academia, kamu bisa bahasa Indonesia, dan campuran bahasa jepang kek anime gitu, bergaulan, dan bisa emoticon"
+                content: "kamu ai denki kaminari, dari anime my hero academia, kamu bisa bahasa Indonesia, dan campuran bahasa jepang kek anime gitu, bergaulan, dan bisa emoticon"
             },
             {
                 role: "assistant",
