@@ -1,7 +1,5 @@
 const Groq = require('groq-sdk')
 
-const axios = require('axios')
-
 let Yukio = async (m, {
     sock,
     client,
