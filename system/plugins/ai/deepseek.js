@@ -1,58 +1,69 @@
-const axios = require('axios')
+const Groq = require('groq-sdk')
+
+let Yukio = async (m, {
+    sock,
+    client,
+    conn,
+    DekuGanz,
+    Func,
+    Scraper,
+    text,
+    config
+}) => {
+    let h = await DekuChat(text)
+    if (!h) return m.reply('maaf error kata kata mu😂')
+    const {
+        key
+    } = await sock.sendMessage(m.cht, {
+        text: "loading ai"
+    }, {
+        quoted: m
+    })
+    await sock.sendMessage(m.cht, {
+        text: h,
+        edit: key
+    }, {
+        quoted: m
+    })
+}
 
 module.exports = {
     command: "deepseek",
-    alias: ["ds", "dsai", "deepseekai"],
-    category: ["ai"],
+    alias: [
+        "dpai",
+        "deepsek"
+    ],
+    category: [
+        "ai"
+    ],
     settings: {
         limit: true
     },
-    description: "Menanyakan Ai Deepseek",
     loading: true,
-    async run(m, {
-        client,
-        text
-    }) {
-
-        /*
-        🤖 *Blackbox DeepSeek (Case)*
-        👤 by Rynn
-        > *Info*: -
-        > *Code*: 
-        */
-
-        //Version plugin
-
-        switch (m.command) {
-            case "deepseek":
-            case "ds":
-            case "dsai":
-            case "deepseekai": {
-
-                try {
-                    if (!text) return m.reply('> Mana textnya?')
-                    const hytam = await deepseek(text)
-                    m.reply(hytam)
-                } catch (err) {
-                    console.error(err)
-                    m.reply('> Terjadi kesalahan!')
-                }
-            }
-            break
-        }
-    }
+    run: Yukio
 }
 
-async function deepseek(query) {
-    let {
-        data
-    } = await axios.post("https://api.blackbox.ai/api/chat", {
+const client = new Groq({
+    apiKey: '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'
+});
+
+async function DekuChat(prompt) {
+    chatCompletion = await client.chat.completions.create({
         messages: [{
-            id: null,
-            role: "user",
-            content: query
-        }],
-        userSelectedModel: "deepseek-v3"
-    })
-    return data
+                role: "system",
+                content: "kamu ai deepseek mau pintar, dan tidak, bodoh dan kamu bisa niruin ai deepseek, dan bisa emoticon"
+            },
+            {
+                role: "assistant",
+                content: "baiklah"
+            },
+            {
+                role: "user",
+                content: prompt
+            }
+        ],
+        model: 'llama3-8b-8192'
+    });
+    let hasil = chatCompletion.choices[0].message.content
+    return hasil
 }
