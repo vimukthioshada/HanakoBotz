@@ -10,7 +10,7 @@ let Yukio = async (m, {
     text,
     config
 }) => {
-    let h = await RimChat(text)
+    let h = await RinChat(text)
     if (!h) return m.reply('maaf error kata kata mu😂')
     const {
         key
