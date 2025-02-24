@@ -1,3 +1,5 @@
+const Groq = require('groq-sdk')
+
 const axios = require('axios')
 
 let Yukio = async (m, {
@@ -10,37 +12,29 @@ let Yukio = async (m, {
     text,
     config
 }) => {
-    if (!text) throw '> Masukan Kata Kata!'
-    const api = 'https://fgsi-ai.hf.space/'
+    let h = await RimChat(text)
+    if (!h) return m.reply('maaf error kata kata mu😂')
     const {
-        data: ai
-    } = await axios.post(api, {
-        messages: [{
-            role: "system",
-            content: "kamu ai rin okumura dari anime blue exorcist"
-        }, {
-            role: "user",
-            content: text
-        }],
-        temperature: 1,
-        max_tokens: 1000,
-        top_p: 1
+        key
+    } = await sock.sendMessage(m.cht, {
+        text: "loading ai"
     }, {
-        headers: {
-            accept: 'application/json',
-            'Content-Type': 'application/json'
-        }
+        quoted: m
     })
-    if (!ai.data.prompt) return m.reply('maaf error kata kata mu😂')
-    m.reply(ai.data.prompt)
+    await sock.sendMessage(m.cht, {
+        text: h,
+        edit: key
+    }, {
+        quoted: m
+    })
 }
 
 module.exports = {
     command: "ai",
     alias: [
-        "openai",
-        "fgsiai",
-        "fongsiai"
+        "openaI",
+        "rin",
+        "rinokumura"
     ],
     category: [
         "ai"
@@ -50,4 +44,29 @@ module.exports = {
     },
     loading: true,
     run: Yukio
+}
+
+const client = new Groq({
+    apiKey: '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'
+});
+
+async function RinChat(prompt) {
+    chatCompletion = await client.chat.completions.create({
+        messages: [{
+                role: "system",
+                content: "kamu ai rin okumura, dari anime blue exocist, kamu bisa bahasa Indonesia, dan campuran bahasa jepang kek anime gitu, bergaulan, dan bisa emoticon, dan jangan pake bahasa inggris, dan bahasa jepang nya sekali aja di gunakan"
+            },
+            {
+                role: "assistant",
+                content: "baiklah"
+            },
+            {
+                role: "user",
+                content: prompt
+            }
+        ],
+        model: 'llama3-8b-8192'
+    });
+    let hasil = chatCompletion.choices[0].message.content
+    return hasil
 }
