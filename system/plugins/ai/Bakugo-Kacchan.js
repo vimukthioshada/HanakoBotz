@@ -1,43 +1,71 @@
 const Groq = require('groq-sdk')
 
+const axios = require('axios')
+
+let Yukio = async (m, {
+    sock,
+    client,
+    conn,
+    DekuGanz,
+    Func,
+    Scraper,
+    text,
+    config
+}) => {
+    let h = await BakugoChat(text)
+    if (!h) return m.reply('maaf error kata kata mu😂')
+    const {
+        key
+    } = await sock.sendMessage(m.cht, {
+        text: "loading ai"
+    }, {
+        quoted: m
+    })
+    await sock.sendMessage(m.cht, {
+        text: h,
+        edit: key
+    }, {
+        quoted: m
+    })
+}
+
 module.exports = {
     command: "bakugo",
-    alias: ["kacchan"],
-    category: ["ai"],
-    description: "Jawab semua pertanyaan mu dengan Yuta",
+    alias: [
+        "kacchan",
+        "bakuai"
+    ],
+    category: [
+        "ai"
+    ],
+    settings: {
+        limit: true
+    },
     loading: true,
-    async run(m, {
-        text
-    }) {
+    run: Yukio
+}
 
-        const client = new Groq({
-            apiKey: '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'
-        });
+const client = new Groq({
+    apiKey: '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'
+});
 
-        async function BakugoChat(prompt) {
-            chatCompletion = await client.chat.completions.create({
-                messages: [{
-                        "role": "system",
-                        "content": "Kamu Adalah Bakugo Katsuki Dari Anime Boku No Hero Academia, Berbahasa Indonesia Dengan Gaya Kasar Dan Penuh Semangat."
-                    },
-                    {
-                        "role": "assistant",
-                        "content": "Tch, apa yang lo mau? Gue Bakugo Katsuki, bukan orang sembarangan! Jangan pernah salah sangka, gue punya Quirk yang luar biasa, Explosion! Lo ngerti gak, ledakan gue bisa hancurin apapun! Gue gak butuh bantuan siapa-siapa, gue cuma butuh lebih banyak latihan buat jadi Hero Terkuat! Kalo lo gak serius, mendingan lo minggir aja! Gue gak ada waktu buat orang yang gak berguna! Jadi, lo mau tanya apa? Cepetan!"
-                    },
-                    {
-                        "role": "user",
-                        "content": prompt
-                    }
-                ],
-                model: 'llama3-8b-8192'
-            });
-
-            let hasil = chatCompletion.choices[0].message.content;
-            return hasil;
-        }
-
-        let h = await BakugoChat(text);
-        m.reply(h);
-
-    }
+async function BakugoChat(prompt) {
+    chatCompletion = await client.chat.completions.create({
+        messages: [{
+                role: "system",
+                content: "kamu ai bakugo kacchan, dari anime my hero academia, kamu bisa bahasa Indonesia, dan campuran bahasa jepang kek anime gitu, bergaulan, dan bisa emoticon, dan bisa marah marah"
+            },
+            {
+                role: "assistant",
+                content: "baiklah"
+            },
+            {
+                role: "user",
+                content: prompt
+            }
+        ],
+        model: 'llama3-8b-8192'
+    });
+    let hasil = chatCompletion.choices[0].message.content
+    return hasil
 }
