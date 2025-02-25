@@ -62,7 +62,7 @@ async function DenkiChat(prompt) {
                 content: prompt
             }
         ],
-        model: 'llama3-8b-8192'
+        model: 'llama-3.3-70b-versatile'
     });
     let hasil = chatCompletion.choices[0].message.content
     return hasil
