@@ -1,8 +1,8 @@
 const axios = require('axios')
 
 let rinokumura = {
-    command: "tiktok",
-    alias: ["tt", "ttdl"],
+    command: "tiktokhd",
+    alias: ["tthd", "ttdlhd"],
     category: ["downloader"],
     settings: {
         limit: true
@@ -30,52 +30,14 @@ let rinokumura = {
 > • Comment: ${dl.comment_count || ''}
 > • Nickname: ${dl.author.nickname || ''}
 > • Unique: ${dl.author.unique_id || ''}
-`
-            if (a.type === "slide") {
-                caption += `> • Slide: ${a.image ? 'true' : 'false'}
+> • Slide: ${a.image ? 'true' : 'false'}
 > • Hd Video: ${a.video_hd ? 'true' : 'false'}
 `
-                let medias = []
-                for (let i of a.image) {
-                    medias.push({
-                        type: 'image',
-                        data: {
-                            url: i
-                        }
-                    })
-                }
-                client.sendAlbumMessage(m.cht, medias, {
-                    caption: caption,
-                    quoted: m
-                })
-            } else if (a.type === "video") {
-                caption += `> • Slide: ${a.image ? 'true' : 'false'}
-> • Hd Video: ${a.video_hd ? 'false' : 'true'}
-`
-                client.sendMessage(m.cht, {
-                    video: {
-                        url: a.video
-                    },
-                    caption: caption,
-                    footer: config.ownername,
-                    viewOnce: true,
-                    headerType: 6,
-                    buttons: [{
-                        buttonId: `.tthd ${text}`,
-                        buttonText: {
-                            displayText: 'Video Hd'
-                        }
-                    }]
-                }, {
-                    quoted: m
-                })
-            }
-            await sock.delay(20000)
-            sock.sendMessage(m.cht, {
-                audio: {
-                    url: a.audio
+            client.sendMessage(m.cht, {
+                video: {
+                    url: a.video_hd
                 },
-                mimetype: 'audio/mpeg'
+                caption: caption
             }, {
                 quoted: m
             })

@@ -15,7 +15,7 @@ module.exports = {
         config
     }) {
         let cap = `*– 乂 Example - Code*
-> Pilih type 1 atau 3 Sesuai Dengan kebutuhan anda`;
+> Pilih type 1 atau 5 Sesuai Dengan kebutuhan anda`;
         if (!text)
             return sock.sendButtonMessage(m.cht, [{
                 type: 'list',
@@ -36,6 +36,16 @@ module.exports = {
                             title: `example 3`,
                             command: `${m.prefix + m.command} 3`,
                             body: `Menampilkan Example 3`
+                        },
+                        {
+                            title: `example 4`,
+                            command: `${m.prefix + m.command} 4`,
+                            body: `Menampilkan Example 4`
+                        },
+                        {
+                            title: `example 5`,
+                            command: `${m.prefix + m.command} 5`,
+                            body: `Menampilkan Example 5`
                         }
                     ]
                 }]
@@ -88,6 +98,56 @@ deku.loading = true
 
 module.exports = deku`
             m.reply(code);
+        } else if (Number(text) === 4) {
+            let code = `let rinokumura = {
+    command: "",
+    alias: [],
+    category: [],
+    settings: {
+        limit: true
+    },
+    description: "",
+    loading: true,
+    async run(m, {
+        sock,
+        client,
+        conn,
+        DekuGanz,
+        Func,
+        Scraper,
+        text,
+        config
+    }) {
+      //Do something
+    }
+}
+
+module.exports = rinokumura`
+            m.reply(code);
+        } else if (Number(text) === 5) {
+            let code = `let Yukio = async (m, {
+    sock,
+    client,
+    conn,
+    DekuGanz,
+    Func,
+    Scraper,
+    text,
+    config
+}) => {
+    //Do something
+}
+
+module.exports = {
+    command: "",
+    alias: [],
+    category: [],
+    settings: {},
+    description: "",
+    loading: true,
+    run: Yukio
+}`
+            m.reply(code);
         } else
             sock.sendButtonMessage(m.cht, [{
                 type: 'list',
@@ -108,6 +168,16 @@ module.exports = deku`
                             title: `example 3`,
                             command: `${m.prefix + m.command} 3`,
                             body: `Menampilkan Example 3`
+                        },
+                        {
+                            title: `example 4`,
+                            command: `${m.prefix + m.command} 4`,
+                            body: `Menampilkan Example 4`
+                        },
+                        {
+                            title: `example 5`,
+                            command: `${m.prefix + m.command} 5`,
+                            body: `Menampilkan Example 5`
                         }
                     ]
                 }]

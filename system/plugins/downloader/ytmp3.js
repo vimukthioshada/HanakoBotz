@@ -1,6 +1,7 @@
 const yts = require("yt-search");
 const ytdl = require('ytdl-core')
 const axios = require('axios')
+const fs = require('node:fs')
 
 class Command {
     constructor() {
@@ -69,13 +70,10 @@ class Command {
         })
 
         try {
-            const {
-                link
-            } = await Scraper.ytmp3cc(text, 'mp3')
+            const distu = await Scraper.distubeyt(text, "mp3")
+
             await sock.sendMessage(m.cht, {
-                audio: {
-                    url: link
-                },
+                audio: distu.getaudio,
                 mimetype: 'audio/mpeg'
             }, {
                 quoted: m
@@ -83,18 +81,32 @@ class Command {
         } catch (err) {
             try {
                 const {
-                    downloadUrl
-                } = await Scraper.ddownr.download(text, 'mp3')
+                    link
+                } = await Scraper.ytmp3cc(text, 'mp3')
                 await sock.sendMessage(m.cht, {
                     audio: {
-                        url: downloadUrl
+                        url: link
                     },
                     mimetype: 'audio/mpeg'
                 }, {
                     quoted: m
                 })
             } catch (err) {
-                m.reply('error' + err)
+                try {
+                    const {
+                        downloadUrl
+                    } = await Scraper.ddownr.download(text, 'mp3')
+                    await sock.sendMessage(m.cht, {
+                        audio: {
+                            url: downloadUrl
+                        },
+                        mimetype: 'audio/mpeg'
+                    }, {
+                        quoted: m
+                    })
+                } catch (err) {
+                    m.reply('error' + err)
+                }
             }
         };
         m.react('✅')

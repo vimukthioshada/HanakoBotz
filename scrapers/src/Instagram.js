@@ -200,6 +200,7 @@ function extractPostInfo(mediaData) {
     };
 
     return {
+      type: mediaData.is_video ? 'video' : 'slide',
       url: getUrlFromData(mediaData),
       metadata: {
          caption: mediaData.edge_media_to_caption.edges[0]?.node.text || null,
